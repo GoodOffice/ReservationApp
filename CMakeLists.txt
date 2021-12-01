@@ -8,7 +8,7 @@ project ("ReservationApp")
 add_definitions(-D_SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING)
 
 # Add source to this project's executable.
-add_executable (ReservationApp "ReservationApp.cpp" "ReservationApp.h" "Rental.cpp" "Customer.cpp" "Vehicle.cpp" "Location.cpp")
+add_executable (ReservationApp "ReservationApp.cpp" "ReservationApp.h" "Rental.cpp" "Customer.cpp" "Vehicle.cpp" "Location.cpp" "Customer.h" "Vehicle.h" "Location.h" "Repository.h")
 
 target_include_directories(ReservationApp PUBLIC "C:\\nana_1.7.4\\nana\\include")
 target_link_libraries(ReservationApp "nana_v143_Debug_x64")
