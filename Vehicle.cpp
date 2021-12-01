@@ -9,7 +9,7 @@ Vehicle::Vehicle(int vh_id, string vh_name) : vehicle_id(vh_id), vehicle_name(vh
 Vehicle::Vehicle(int vh_id, string vh_name,  bool vh_status) : vehicle_id(vh_id), vehicle_name(vh_name), status(vh_status) { }
 
 /*Gets*/
-int Vehicle::getVehicle_Id() { return vehicle_id; }
+int Vehicle::getVehicle_Id() { return this->vehicle_id; }
 string Vehicle::getVehicle_Name() { return vehicle_name; }
 int Vehicle::getVehicle_Location_Id() { return vehicle_location_id; }
 bool Vehicle::getVehicle_Status() { return status; }

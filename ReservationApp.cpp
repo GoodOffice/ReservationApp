@@ -31,6 +31,9 @@ int main()
 
     Repository* repo = new Repository();
     repo->addVehicleToLocation();
+    //repo->getVehicle_Info(); // accessible if Repository extends : public Location
+
+    
 
 
     return 0;

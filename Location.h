@@ -12,13 +12,15 @@ public:
 	int location_id;
 	string location_name;
 	int location_status;
-	int capacity;
+	int capacity = 0;
+	Vehicle* location_Veh;
 
 	Location();
 	Location(int, string);
-	Location(int, string, bool);
+	//Location(int, string, bool);
 
 	/*Get Methods*/
+
 	int getLocation_Id();
 	string getLocation_Name();
 	bool getLocation_Status();
