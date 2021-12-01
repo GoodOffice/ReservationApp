@@ -13,6 +13,7 @@ public:
 	bool status;
 
 	Vehicle();
+	Vehicle(Vehicle&);
 	Vehicle(int, string);
 	Vehicle(int, string,  bool);
 

@@ -30,7 +30,7 @@ void Location::getLocation_Info(){
 };
 
 int Location::getCapacity() {
-	cout << "Location.cpp:: getCapacity: location Id_ " <<  this->capacity << endl;
+	// cout << "Location.cpp:: getCapacity: location Id_ " <<  this->capacity << endl;
 	return capacity; }
 
 /*Sets*/

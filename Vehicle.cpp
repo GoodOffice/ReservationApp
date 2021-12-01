@@ -5,6 +5,10 @@
 #include "Location.h"
 
 Vehicle::Vehicle(){ }
+Vehicle::Vehicle(Vehicle& vh){
+	setVehicle_Name(vh.getVehicle_Name());
+
+}
 Vehicle::Vehicle(int vh_id, string vh_name) : vehicle_id(vh_id), vehicle_name(vh_name) { }
 Vehicle::Vehicle(int vh_id, string vh_name,  bool vh_status) : vehicle_id(vh_id), vehicle_name(vh_name), status(vh_status) { }
 
