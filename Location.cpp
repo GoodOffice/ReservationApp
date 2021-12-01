@@ -11,13 +11,13 @@ Location::Location(int lc_id, string lc_name) : location_id(lc_id), location_nam
 /*Gets*/
 inline int Location::getLocation_Id() { return location_id; };
 string Location::getLocation_Name() { return location_name; };
-bool Location::getLocation_Status() { return location_status; };
+int Location::getLocation_Status() { return location_status; };
 void Location::getLocation_Info(){ 
 	if (getLocation_Id() != NULL)
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Id: " << getLocation_Id() << endl;
 	if (getLocation_Name() != " ")
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Name: " << getLocation_Name() << endl;
-	if (getLocation_Status() != NULL)
+	if (getLocation_Status() <!0)
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Status: " << getLocation_Status() << endl;
 	if (getCapacity() > 0) {
 		cout << "Location.cpp:: getLocation_Info -> getCapacity: location Id " << location_id << " size is " << this->capacity << endl;

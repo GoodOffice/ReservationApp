@@ -11,7 +11,7 @@ class Location : public Vehicle {
 public:
 	int location_id;
 	string location_name;
-	int location_status;
+	int location_status = 0;
 	int capacity = 0;
 	Vehicle* location_Veh;
 
@@ -23,7 +23,7 @@ public:
 
 	int getLocation_Id();
 	string getLocation_Name();
-	bool getLocation_Status();
+	int getLocation_Status();
 	int getCapacity();
 	void getLocation_Info();
 

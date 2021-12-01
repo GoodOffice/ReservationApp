@@ -3,10 +3,10 @@
 #ifndef Repository_
 #define Repository_
 #include <iostream>
-#include "Vehicle.h"
-using namespace std;
-
 #include "Location.h"
+#include "Vehicle.h"
+
+using namespace std;
 
 class Repository { // public Location,
 public:
@@ -27,10 +27,26 @@ public:
 
 		Location* location = new Location(29, "Vancouver");
 		Vehicle* veh = new Vehicle(32, "Lamborghini Veratti");
+		Vehicle* veh2 = new Vehicle(18, "Mercedes 4 Matic");
 		
 		location->addVehicles(veh);
 		veh->getVehicle_Info();
 		location->getLocation_Info();
+
+		location->addVehicles(veh2);
+		veh2->getVehicle_Info();
+		location->getLocation_Info();
+
+		delete veh;
+		delete location;
+	}
+
+	void removeVehicleFromLocation() {
+
+	}
+
+	void removeAllVehicleFromLocation(int loc_id) {
+
 	}
 
 };
