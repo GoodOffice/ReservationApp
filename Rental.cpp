@@ -1,7 +1,15 @@
 #include <iostream>
 using namespace std;
 
-class Rental{
+#include "Customer.h"
+#include "Vehicle.h"
+#include "Location.h"
+
+class Rental {
+public:
+
+
+	
 
 
 };
