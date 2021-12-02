@@ -9,7 +9,7 @@ class Customer { // extends person
 
 public:
 	string firstname, lastname, address;
-	int age;
+	int age, attrb_rental_id;
 	bool has_designation;
 
 	Customer(); // constructor
@@ -20,6 +20,7 @@ public:
 	string getLastName();
 	string getAddress();
 	int getAge();
+	int getAttrb_Rental_Id();
 	bool getDesignation();
 	void getCustomer_Info();
 
@@ -28,6 +29,7 @@ public:
 	void setLastName(string);
 	void setAddress(string);
 	void setAge(int);
+	void setAttrb_Rental_Id(int);
 	void setDesignation(bool);
 	
 
