@@ -12,8 +12,6 @@ using namespace std;
 
 class Repository { // public Location,
 public:
-	int unAvailable = 0;
-	int Available = 1;
 	int vehicles_capacity; // size
 
 	///*Create locations*/

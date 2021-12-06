@@ -34,15 +34,13 @@ int main()
     customer1->setLastName("Likken");
     customer1->setAddress("140 Paramount View");
     customer1->setAge(19);
-    customer1->setDesignation(true);
     customer1->setAddress("140 Paramount View");
     //customer1->getCustomer_Info(); 
 
     Customer* customer2 = new Customer();
     customer2->setLastName("Debby");
     customer2->setAddress("140 Paramount View");
-    customer2->setAge(24);
-    customer2->setDesignation(true);
+    customer2->setAge(26);
     customer2->setAddress("9400 Pinterest Avenue");
 
     
@@ -66,6 +64,7 @@ int main()
 
         /* --- Setting up rental location --- */
         Repository* repository = new Repository();
+        rental->setRental_Repository(repository);
         vector<Location*> location_List = repository->getLocationList();
         int sizeLoc = location_List.size();
         /* TO_DO: Print location list here using iterator */
@@ -97,8 +96,13 @@ int main()
 
         cout << "This customer selected a ... " << rental->getRentalVehicle()->getVehicle_Name() << endl;
 
-
-
+        rental->getRentalVehicle()->setVehicle_Status(false); // set vehicle to not available
+        rental->getRentalVehicle()->getVehicle_Status();
+        if (rental->getRentalCustomer()->getReputation() != false)
+            
+        //rental->getRental_Repository();
+        rental->bonoCheck(rental->getRentalCustomer()); 
+        customer2->getCustomer_Info(); // checking if customer reputation has been updated 
         
 
     return 0;

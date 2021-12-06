@@ -10,7 +10,9 @@ class Vehicle {
 public:
 	int vehicle_id, vehicle_location_id;
 	string vehicle_name; // to remove later - >vehicle_location_name 
-	bool status;
+	int isUnAvailable = 0;
+	int isAvailable = 1;
+	bool status = isAvailable;
 
 	Vehicle();
 	Vehicle(Vehicle&);

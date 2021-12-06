@@ -19,7 +19,7 @@ int Customer::getAttrb_Rental_Id() {
 	else
 	cout << "Customer.cpp:: getAttrb_Rental_Id - Rental Id (attributed):" << this->attrb_rental_id << endl;
 	return attrb_rental_id; }
-bool Customer::getDesignation() { return has_designation; }
+bool Customer::getReputation() { return reputation; }
 void Customer::getCustomer_Info() {
 	if (getFirstName() != "")
 		cout << "Customer.cpp:: getCustomer_Info -> getFirstName: " << getFirstName() << endl;
@@ -29,8 +29,11 @@ void Customer::getCustomer_Info() {
 		cout << "Customer.cpp:: getCustomer_Info -> getAddress: " << getAddress() << endl;
 	if (getAge() < 100 && getAge() >= 16)
 		cout << "Customer.cpp:: getCustomer_Info -> getAge: " << getAge() << endl;
-	if (getDesignation() == false || getDesignation() == true)
-		cout << "Customer.cpp:: getCustomer_Info -> getDesignation: " << getDesignation() << endl;
+
+	if(getReputation() == 1)
+		cout << "Customer.cpp:: getCustomer_Info -> getReputation: is preferred " << endl;
+	else
+		cout << "Customer.cpp:: getCustomer_Info -> getReputation:has no designation " << endl;
 }
 
 /*Sets*/
@@ -45,7 +48,8 @@ void Customer::updateAttrb_Rental_Id(int rental_id) {
 	cout << "Customer.cpp:: updateAttrb_Rental_Id: " << rental_id << endl;
 	this->attrb_rental_id = rental_id;
 }
-void Customer::setDesignation(bool designation) { this->has_designation = designation; }
+void Customer::setReputation(bool reputation) {
+	this->reputation = reputation; }
 Customer::~Customer() { } // desctructor
 	
 	

@@ -11,7 +11,8 @@ public:
 	string firstname, lastname, address;
 	int age;
 	int attrb_rental_id = -1;
-	bool has_designation;
+	int isFavorite = 1;
+	bool reputation;
 	//Rental* rtl;
 
 	Customer(); // constructor
@@ -23,7 +24,7 @@ public:
 	string getAddress();
 	int getAge();
 	int getAttrb_Rental_Id();
-	bool getDesignation();
+	bool getReputation();
 	void getCustomer_Info();
 
 	/*Set Methods*/
@@ -33,7 +34,7 @@ public:
 	void setAge(int);
 	void setAttrb_Rental_Id(int);
 	void updateAttrb_Rental_Id(int);
-	void setDesignation(bool);
+	void setReputation(bool);
 	
 
 	~Customer();

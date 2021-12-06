@@ -34,6 +34,16 @@ public:
 		customer->setAttrb_Rental_Id(rental_id);
 	}
 
+	void setRental_Repository(Repository* repository) {
+		repo = repository;
+
+	}
+
+	Repository* getRental_Repository() {
+		return repo;
+	}
+
+
 	void setRentalCustomer(Customer* customer) {
 		cstm = customer;		
 	}
@@ -93,7 +103,28 @@ public:
 		}
 	}
 
-	
+	void bonoCheck(Customer* customer) {
+		cstm = customer;
+		if (cstm->getAge() <= 25) {
+			applyCharge();			
+		}
+		else {
+			if (cstm->getReputation() != cstm->isFavorite) {
+				cstm->setReputation(true); // set customer to 'preferred customer'
+				applyPromo();
+			}
+			else
+				cout << "Standard payment fees  " << endl; 
+		}			
+	}
+
+	void applyCharge() {
+		cout << "Additional Charge of 20% applied " << endl;
+	}
+
+	void applyPromo() {
+		cout << "20% off Promotion applied " << endl;
+	}
 
 
 
