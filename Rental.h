@@ -11,7 +11,9 @@
 class Rental {
 public:
 	int rental_id = 0;
-		int start_date, end_date, days_count;
+		int start_date, return_date;
+		int time_elapsed = 0;
+		int days_count = 0;
 	Customer* cstm;
 	Location* rentalLocation;
 	Vehicle* rentalVehicle;
@@ -100,14 +102,32 @@ public:
 		}
 	}
 
+	int getBegins_Date() {
+		cout << "Rental.h:: getBegins_Date - Begins date ## "<< start_date << endl;
+		return start_date;
+	}
+
+	void setBegins_Date(int start) {
+		start_date = start;
+
+	}
+
+	int getReturn_Date() {
+		cout << "Rental.h:: getReturn_Date - Return date ## " << return_date << endl;
+		return return_date;
+	}
+
+	void setReturn_Date(int end) {
+		return_date = end;
+	}
+
 	void bonoCheck(Customer* customer) {
 		cstm = customer;
 		if (cstm->getAge() <= 25) {
 			applyCharge();			
 		}
 		else {
-			if (cstm->getReputation() != cstm->isFavorite) {
-				cstm->setReputation(1); // set customer to 'preferred customer'
+			if (cstm->getReputation() == cstm->isFavorite) {
 				applyPromo();
 			}
 			else
@@ -123,6 +143,30 @@ public:
 		cout << "Rental.h:: applyPromo 20% off Promotion applied " << endl;
 	}
 
+	void dayIncrementer() {
+		
+		//int expected_day = 0;
+		time_elapsed = return_date - (start_date + days_count); // 10
+		
+
+		time_elapsed--; // 9
+		days_count++;
+
+		int change = start_date + days_count;
+	
+
+		if(change == return_date)
+			cout << "Rental.h:: dayIncremental - You've reached return date: " << return_date << endl;
+
+		else if (change > return_date) {
+			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - EXPECTED: " << return_date << endl;
+			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - CURRENT: " << start_date + days_count << endl;
+		}
+
+
+		cout << "Rental.h:: dayIncremental - time elapsed: " << time_elapsed << endl;
+		cout << "Rental.h:: dayIncremental - days count: " << days_count << endl;
+	}
 
 
 };

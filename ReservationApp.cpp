@@ -96,13 +96,24 @@ int main()
 
         cout << "This customer selected a ... " << rental->getRentalVehicle()->getVehicle_Name() << endl;
 
+        rental->start_date = 30;
+        rental->return_date = 32;
+
         rental->getRentalVehicle()->setVehicle_Status(0); // set vehicle to not available
         rental->getRentalVehicle()->getVehicle_Status();
 
-            
-        //rental->getRental_Repository();
+        /* Setting Rental Customer's rep */        
+        rental->getRentalCustomer()->setReputation(1); // set customer to 'preferred customer' 
         rental->bonoCheck(rental->getRentalCustomer()); 
         customer2->getCustomer_Info(); // checking if customer reputation has been updated 
+        rental->getBegins_Date();
+        rental->getReturn_Date();
+
+        /* Days simulation*/
+        rental->dayIncrementer();
+        rental->dayIncrementer();
+       
+
         
 
     return 0;
