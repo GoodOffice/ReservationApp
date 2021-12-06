@@ -41,6 +41,10 @@ void Customer::setAge(int age) { this->age = age; }
 void Customer::setAttrb_Rental_Id(int rental_id) { 
 	cout << "Customer.cpp:: setAttrb_Rental_Id: " << rental_id << endl;
 	this->attrb_rental_id = rental_id; }
+void Customer::updateAttrb_Rental_Id(int rental_id) {
+	cout << "Customer.cpp:: updateAttrb_Rental_Id: " << rental_id << endl;
+	this->attrb_rental_id = rental_id;
+}
 void Customer::setDesignation(bool designation) { this->has_designation = designation; }
 Customer::~Customer() { } // desctructor
 	

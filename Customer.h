@@ -9,8 +9,10 @@ class Customer { // extends person
 
 public:
 	string firstname, lastname, address;
-	int age, attrb_rental_id;
+	int age;
+	int attrb_rental_id = -1;
 	bool has_designation;
+	//Rental* rtl;
 
 	Customer(); // constructor
 	Customer(string cs_fname); // 1 parameter constructor
@@ -30,6 +32,7 @@ public:
 	void setAddress(string);
 	void setAge(int);
 	void setAttrb_Rental_Id(int);
+	void updateAttrb_Rental_Id(int);
 	void setDesignation(bool);
 	
 

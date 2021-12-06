@@ -23,6 +23,42 @@ public:
 	///*Create vehicles*/
 	//Vehicle* veh = new Vehicle(32, "Lamborghini Veratti");
 	
+	vector<Location*> getLocationList() {
+		Location* location1 = new Location(4, "Toronto, ON");
+		Location* location2 = new Location(5, "Montreal, QC");
+		Location* location3 = new Location(7, "Vancouver, BC");
+		Location* location4 = new Location(8, "Calgary, AB");
+
+		vector<Location*> locations;
+		locations.push_back(location1);
+		locations.push_back(location2);
+		locations.push_back(location3);
+		locations.push_back(location4);
+
+		return locations;
+	}
+
+
+	vector<Vehicle*> getVehicleList() {
+		Vehicle* veh1 = new Vehicle(18, "Mercedes S-Class");
+		Vehicle* veh2 = new Vehicle(19, "BMW 7 Series");
+		Vehicle* veh3 = new Vehicle(20, "Audi A8");
+		Vehicle* veh4 = new Vehicle(60, "porsche panamera");
+		Vehicle* veh5 = new Vehicle(61, "Lamborghini Diablo");
+		Vehicle* veh6 = new Vehicle(62, "Jeep Gladiator");
+		Vehicle* veh7 = new Vehicle(32, "Lamborghini Veratti");
+
+		vector<Vehicle*> vehicles;
+		vehicles.push_back(veh1);
+		vehicles.push_back(veh2);
+		vehicles.push_back(veh3);
+		vehicles.push_back(veh4);
+		vehicles.push_back(veh5);
+		vehicles.push_back(veh6);
+		vehicles.push_back(veh7);
+
+		return vehicles;
+	}
 
 	void addVehicleToLocation() {
 		//if(location->capacity < 10)
