@@ -25,11 +25,8 @@ public:
 
 	
 	void createNewRental(Customer* customer) {
-		if (customer->getAge() <= 25) {
-			cout << "\nYou are 25 or below, 20% extra will be applied, and you cannot be designated\n" << endl;
-			
-			setRentalCustomer(customer);
-		}
+
+		setRentalCustomer(customer);
 		rental_id++;
 		customer->setAttrb_Rental_Id(rental_id);
 	}
@@ -110,20 +107,20 @@ public:
 		}
 		else {
 			if (cstm->getReputation() != cstm->isFavorite) {
-				cstm->setReputation(true); // set customer to 'preferred customer'
+				cstm->setReputation(1); // set customer to 'preferred customer'
 				applyPromo();
 			}
 			else
-				cout << "Standard payment fees  " << endl; 
+				cout << "Rental.h:: getReputation Standard payment fees  " << endl; 
 		}			
 	}
 
 	void applyCharge() {
-		cout << "Additional Charge of 20% applied " << endl;
+		cout << "Rental.h:: applyCharge Additional Charge of 20% applied " << endl;
 	}
 
 	void applyPromo() {
-		cout << "20% off Promotion applied " << endl;
+		cout << "Rental.h:: applyPromo 20% off Promotion applied " << endl;
 	}
 
 

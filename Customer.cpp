@@ -15,11 +15,11 @@ string Customer::getAddress() {	return address; }
 int Customer::getAge() { return age; }
 int Customer::getAttrb_Rental_Id() { 
 	if (attrb_rental_id < 0) 
-		cout << "\n**Customer.cpp:: getAttrb_Rental_Id - Log: Rental must be created before operation, check and fix code order:" << this->attrb_rental_id << endl;
+		cout << "\n**Customer.cpp:: getAttrb_Rental_Id - Log: Rental must be created before operation, check and fix code order:" << attrb_rental_id << endl;
 	else
-	cout << "Customer.cpp:: getAttrb_Rental_Id - Rental Id (attributed):" << this->attrb_rental_id << endl;
+	cout << "Customer.cpp:: getAttrb_Rental_Id - Rental Id (attributed):" << attrb_rental_id << endl;
 	return attrb_rental_id; }
-bool Customer::getReputation() { return reputation; }
+int Customer::getReputation() { return reputation; }
 void Customer::getCustomer_Info() {
 	if (getFirstName() != "")
 		cout << "Customer.cpp:: getCustomer_Info -> getFirstName: " << getFirstName() << endl;
@@ -37,19 +37,20 @@ void Customer::getCustomer_Info() {
 }
 
 /*Sets*/
-void Customer::setFirstName(string cs_fname) { this->firstname = cs_fname; }
-void Customer::setLastName(string cs_lname) { this->lastname = cs_lname; }
-void Customer::setAddress(string cs_address) { this->address = cs_address; }
-void Customer::setAge(int age) { this->age = age; }
+void Customer::setFirstName(string cs_fname) { firstname = cs_fname; }
+void Customer::setLastName(string cs_lname) { lastname = cs_lname; }
+void Customer::setAddress(string cs_address) { address = cs_address; }
+void Customer::setAge(int a) { 
+	age = a; }
 void Customer::setAttrb_Rental_Id(int rental_id) { 
 	cout << "Customer.cpp:: setAttrb_Rental_Id: " << rental_id << endl;
-	this->attrb_rental_id = rental_id; }
+	attrb_rental_id = rental_id; }
 void Customer::updateAttrb_Rental_Id(int rental_id) {
 	cout << "Customer.cpp:: updateAttrb_Rental_Id: " << rental_id << endl;
-	this->attrb_rental_id = rental_id;
+	attrb_rental_id = rental_id;
 }
-void Customer::setReputation(bool reputation) {
-	this->reputation = reputation; }
+void Customer::setReputation(int rep) {
+	reputation = rep; }
 Customer::~Customer() { } // desctructor
 	
 	

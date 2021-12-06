@@ -30,11 +30,11 @@ int main()
 
     //Customer* customer = new Customer("Olga");
      /*TO_DO: epand Customer constructor parameter list to have all necessary or below properties */
-    Customer* customer1 = new Customer();
-    customer1->setLastName("Likken");
-    customer1->setAddress("140 Paramount View");
-    customer1->setAge(19);
-    customer1->setAddress("140 Paramount View");
+    //Customer* customer1 = new Customer();
+    //customer1->setLastName("Likken");
+    //customer1->setAddress("140 Paramount View");
+    //customer1->setAge(78);
+    //customer1->setAddress("140 Paramount View");
     //customer1->getCustomer_Info(); 
 
     Customer* customer2 = new Customer();
@@ -48,16 +48,16 @@ int main()
    //     printf("Sorry, you must be 18+ for rentals.");
    //else {
         Rental* rental = new Rental();
-        rental->createNewRental(customer1);
-        rental->getRentalBy_Id(1); // works sequentially by the element
+       // rental->createNewRental(customer1);
+       // rental->getRentalBy_Id(0); // works sequentially by the element
         rental->createNewRental(customer2);
         //rental->getRentalSize();
         rental->getRentalCustomer()->getCustomer_Info();
    // }
     
-        customer1->getAttrb_Rental_Id();
+       // customer1->getAttrb_Rental_Id();
 
-        rental->getRentalBy_Id(2); /*TO_DO: catch exception for when number is higher than size of all rentals*/
+        rental->getRentalBy_Id(1); /*TO_DO: catch exception for when number is higher than size of all rentals*/
         cout << "Setting new Id... " << endl;
         //rental->setRentalId_By_Customer(customer1, 87);
         //customer1->getAttrb_Rental_Id();
@@ -96,9 +96,9 @@ int main()
 
         cout << "This customer selected a ... " << rental->getRentalVehicle()->getVehicle_Name() << endl;
 
-        rental->getRentalVehicle()->setVehicle_Status(false); // set vehicle to not available
+        rental->getRentalVehicle()->setVehicle_Status(0); // set vehicle to not available
         rental->getRentalVehicle()->getVehicle_Status();
-        if (rental->getRentalCustomer()->getReputation() != false)
+
             
         //rental->getRental_Repository();
         rental->bonoCheck(rental->getRentalCustomer()); 

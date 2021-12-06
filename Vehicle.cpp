@@ -37,5 +37,5 @@ void Vehicle::getVehicle_Info() {
 void Vehicle::setVehicle_Id(int vh_id) { this->vehicle_id = vh_id; }
 void Vehicle::setVehicle_Name(string vh_name) { this->vehicle_name = vh_name; }
 void Vehicle::setVehicle_Location_Id(int vh_location) { this->vehicle_location_id = vh_location; }
-void Vehicle::setVehicle_Status(bool status) { this->status = status; }
+void Vehicle::setVehicle_Status(int status) { this->status = status; }
 Vehicle::~Vehicle() { }

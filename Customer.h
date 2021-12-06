@@ -9,10 +9,10 @@ class Customer { // extends person
 
 public:
 	string firstname, lastname, address;
-	int age;
+	int age = 0;
 	int attrb_rental_id = -1;
 	int isFavorite = 1;
-	bool reputation;
+	int reputation = 0;
 	//Rental* rtl;
 
 	Customer(); // constructor
@@ -24,7 +24,7 @@ public:
 	string getAddress();
 	int getAge();
 	int getAttrb_Rental_Id();
-	bool getReputation();
+	int getReputation();
 	void getCustomer_Info();
 
 	/*Set Methods*/
@@ -34,7 +34,7 @@ public:
 	void setAge(int);
 	void setAttrb_Rental_Id(int);
 	void updateAttrb_Rental_Id(int);
-	void setReputation(bool);
+	void setReputation(int);
 	
 
 	~Customer();

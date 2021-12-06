@@ -12,7 +12,7 @@ public:
 	string vehicle_name; // to remove later - >vehicle_location_name 
 	int isUnAvailable = 0;
 	int isAvailable = 1;
-	bool status = isAvailable;
+	int status = isAvailable;
 
 	Vehicle();
 	Vehicle(Vehicle&);
@@ -30,7 +30,7 @@ public:
 	void setVehicle_Id(int);
 	void setVehicle_Name(string);
 	void setVehicle_Location_Id(int );
-	void setVehicle_Status(bool );
+	void setVehicle_Status(int );
 	~Vehicle();
 
 };
