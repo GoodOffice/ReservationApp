@@ -3,118 +3,97 @@
 
 #include "ReservationApp.h"
 #include <nana/gui.hpp>
+#include <nana/gui/place.hpp>
+#include <nana/gui/tooltip.hpp>
 #include <nana/gui/widgets/label.hpp>
 #include <nana/gui/widgets/button.hpp>
+#include <nana/gui/widgets/textbox.hpp>
+#include <nana/gui/widgets/combox.hpp>
 #include "Customer.h"
 #include "Vehicle.h"
 #include "Location.h"
 #include "Repository.h"
 #include "Rental.h"
 #include <iostream>
-using namespace std;
-using namespace nana;
+
+
 
 int main()
 {
- 
+    using namespace std;
+    using namespace nana;
 
-    //Vehicle* vehicle = new Vehicle(32, "Lamborghini Veratti");
-    //vehicle->getVehicle_Info();
+    //Define widgets
+    form fm;
+    fm.outline_size({ 300, 550 });
+    fm.caption("Customer");
+    label lab{ fm, "Hello, <bold blue size=16>Customers</>" }, desc{ fm, "Create a new customer or select from the list above to continue." };
+    lab.format(true);
 
-    //Location* location = new Location(99, "Vancouver");
-    //location->getLocation_Info();
-    
-    Repository* repo = new Repository();
-    repo->addVehicleToLocation();
-    //repo->getVehicle_Info(); // accessible if Repository extends : public Location
+    combox child(fm, rectangle(20, 3, 150, 30));
+    child.push_back("Item 1");
+    child.push_back("Item 2");
+    child.push_back("Item 3");
+    child.push_back("Item 4");
+    child.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
 
-    //Customer* customer = new Customer("Olga");
-     /*TO_DO: epand Customer constructor parameter list to have all necessary or below properties */
-    //Customer* customer1 = new Customer();
-    //customer1->setLastName("Likken");
-    //customer1->setAddress("140 Paramount View");
-    //customer1->setAge(78);
-    //customer1->setAddress("140 Paramount View");
-    //customer1->getCustomer_Info(); 
+    textbox fname(fm), lname(fm), age(fm), address(fm);
+    button login(fm), cancel(fm);
 
-    Customer* customer2 = new Customer();
-    customer2->setLastName("Debby");
-    customer2->setAddress("140 Paramount View");
-    customer2->setAge(26);
-    customer2->setAddress("9400 Pinterest Avenue");
+    fname.tip_string("Firstname").multi_lines(false);
+    lname.tip_string("Lastname").multi_lines(false);
+    age.tip_string("Age").multi_lines(false);
+    address.tip_string("Address").multi_lines(false);
 
-    
-   // if (customer1->getAge() < 18)
-   //     printf("Sorry, you must be 18+ for rentals.");
-   //else {
-        Rental* rental = new Rental();
-       // rental->createNewRental(customer1);
-       // rental->getRentalBy_Id(0); // works sequentially by the element
-        rental->createNewRental(customer2);
-        //rental->getRentalSize();
-        rental->getRentalCustomer()->getCustomer_Info();
-   // }
-    
-       // customer1->getAttrb_Rental_Id();
+    login.caption("Add Customer");
+    cancel.caption("Cancel");
 
-        rental->getRentalBy_Id(1); /*TO_DO: catch exception for when number is higher than size of all rentals*/
-        cout << "Setting new Id... " << endl;
-        //rental->setRentalId_By_Customer(customer1, 87);
-        //customer1->getAttrb_Rental_Id();
+    fname.events().focus([&login] { // selected or focus
+    //fm.close();
+        login.caption("Add Customer");
 
-        /* --- Setting up rental location --- */
-        Repository* repository = new Repository();
-        rental->setRental_Repository(repository);
-        vector<Location*> location_List = repository->getLocationList();
-        int sizeLoc = location_List.size();
-        /* TO_DO: Print location list here using iterator */
+        });
 
-        /* Get a location by Id */
-        Location* location = location_List.at(3);
-        string loc_name = location->getLocation_Name();
+    child.events().selected([&login] { // selected or focus
+        //fm.close();
+        login.caption("Select");
 
-        cout << "Location size... " << sizeLoc << endl;
-        cout << "Location name... " << loc_name << endl;
+        });
 
-        rental->setRentalLocation(location);
 
-        /* --- Setting up rental vehicle --- */
+    cancel.events().click([&fm] {
+        fm.close();
+        });
 
-        vector<Vehicle*> vehicle_List = repository->getVehicleList();
-        int sizeVeh = vehicle_List.size();
-        /* TO_DO: Print location list here using iterator */
+    //Define a place for the form.
+    place plc(fm);
 
-        /* Get a location by Id */
-        Vehicle* vehicle = vehicle_List.at(3);
-        string veh_name = vehicle->getVehicle_Name();
+    // Divide the form into fields
+    plc.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist> < weight=25%> <weight=15% description> <weight=25 buttons> ><>><>");
+    //Insert widgets
+    plc.field("title") << lab;
+    plc.field("description") << desc;
+    plc.field("droplist") << child;
+    //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
+    plc.field("textboxs") << fname << lname << age << address;
+    plc.field("buttons") << login << cancel;
+    //Finially, the widgets should be collocated.
+    //Do not miss this line, otherwise the widgets are not collocated
+    //until the form is resized.
+    plc.collocate();
 
-        //cout << "Vehicle size... " << sizeVeh << endl;
-        //cout << "Vehicle name... " << veh_name << endl;
+    //auto s = screen();
+    //auto pa = s.get_primary().workarea();
+    //form fm0, fm1, fm2, fm3;
+    ////fm0.move(pa.x, pa.y);
+    //fm0.outline_size({ 600, 250 });
+    //fm0.caption("screen 0");
+    //fm0.show();
 
-        rental->setRentalVehicle(vehicle);
-        rental->getRentalVehicle();
 
-        cout << "This customer selected a ... " << rental->getRentalVehicle()->getVehicle_Name() << endl;
 
-        rental->start_date = 30;
-        rental->return_date = 32;
+    fm.show();
+    exec();
 
-        rental->getRentalVehicle()->setVehicle_Status(0); // set vehicle to not available
-        rental->getRentalVehicle()->getVehicle_Status();
 
-        /* Setting Rental Customer's rep */        
-        rental->getRentalCustomer()->setReputation(1); // set customer to 'preferred customer' 
-        rental->bonoCheck(rental->getRentalCustomer()); 
-        customer2->getCustomer_Info(); // checking if customer reputation has been updated 
-        rental->getBegins_Date();
-        rental->getReturn_Date();
-
-        /* Days simulation*/
-        rental->dayIncrementer();
-        rental->dayIncrementer();
-       
-
-        
-
-    return 0;
 }
