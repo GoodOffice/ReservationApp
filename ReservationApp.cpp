@@ -15,8 +15,9 @@
 #include "Repository.h"
 #include "Rental.h"
 #include <iostream>
-
-
+#include <vector>
+#include <set>
+#include <algorithm>
 
 int main()
 {
@@ -49,16 +50,16 @@ int main()
     lab.format(true);
 
     combox child(fm1, rectangle(20, 3, 150, 30));
-    child.push_back("Item 1");
-    child.push_back("Item 2");
-    child.push_back("Item 3");
-    child.push_back("Item 4");
+    //child.push_back("Item 1");
+    //child.push_back("Item 2");
+    //child.push_back("Item 3");
+    //child.push_back("Item 4");
     child.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
 
     /* ------- Customers <start>------- */
 
     textbox fname(fm1), lname(fm1), age(fm1), address(fm1);
-    button removeBtn(fm1), login(fm1), cancel(fm1);
+    button removeBtn(fm1), selectBtn(fm1), cancel(fm1);
 
     fname.tip_string("Firstname").multi_lines(false);
     lname.tip_string("Lastname").multi_lines(false);
@@ -67,47 +68,97 @@ int main()
 
     removeBtn.caption("Remove");
     removeBtn.enabled(false);
-    login.caption("Add Customer");
-    login.enabled(false);
+    selectBtn.caption("Add Customer");
+    selectBtn.enabled(false);
     cancel.caption("Cancel");
 
-    login.events().click([&fm2] {
-        //fm2.show();
+    
+    vector<Customer*> customers;
+
+    int incr = 1;
+
+    /* Creates a customer with textbox values*/
+    selectBtn.events().click([&] {
+        bool exist = false;
+        string fnameTyped, lnameTyped, ageTyped, addressType;
+        fname.getline(0, fnameTyped);
+        lname.getline(0, lnameTyped);
+        age.getline(0, ageTyped);
+        address.getline(0, addressType);
+
+        //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
+        Customer* customer = new Customer();
+        
+        customer->setFirstName(fnameTyped);
+        customer->setLastName(lnameTyped);
+        customer->setAge(stoi(ageTyped));
+        customer->setAddress(addressType);
+        customer->id = incr;
+
+        string firstName = fnameTyped;
+        string lastName = lnameTyped;
+        
+
+        cout << "\Customers size=" << customers.size() << endl;
+        incr++;
+        int index = 0;
+        for (vector<Customer*>::iterator itr = customers.begin(); itr != customers.end(); itr++)
+        {
+                string comp_fname = customers.at(index)->getFirstName();
+                string comp_lname = customers.at(index)->getLastName();
+                cout << "comp_firstname: " << comp_fname << endl;
+                cout << "comp_lastname: " << comp_lname << endl;
+                if (firstName == comp_fname && lastName == comp_lname) {
+                    exist = true;
+                    cout << "Customer already exists." << endl;
+                    break;
+                }
+                else {
+                    exist = false;
+                    cout << "Customer is new." << endl;
+                }
+
+            index++;
+        }
+
+
+        if (exist == false){
+            customer->getCustomer_Info();
+            customers.push_back(customer);
+            string fullName = firstName + " " + lastName;
+            child.push_back(fullName);
+        }
+
         });
 
-    fname.events().focus([&login] { // selected or focus
+    fname.events().focus([&selectBtn] { // selected or focus
     //fm.close();
-        login.caption("Add Customer");
+        selectBtn.caption("Add Customer");
+        selectBtn.enabled(true);
 
         });
 
-    child.events().focus([&fname, &lname, &age, &address, &child] { // selected or focus
-        fname.enabled(false);
-        lname.enabled(false);
-        age.enabled(false);
-        address.enabled(false);
+
+
+    child.events().focus([&] { // selected or focus
+        //fname.enabled(false);
+        //lname.enabled(false);
+        //age.enabled(false);
+        //address.enabled(false);
         int fl = 1;
         //toggleView(fl);
 
         });
 
-    fm1.events().click([&fname, &lname, &age, &address, &child, &fm1] { // selected or focus
-        cout << "Form is clicked" << endl;
-        fm1.focus();
-        
-        fname.enabled(true);
-        lname.enabled(true);
-        age.enabled(true);
-        address.enabled(true);
-        });
 
 
 
-    child.events().selected([&login, &removeBtn] { // selected or focus
+
+    child.events().selected([&] { // selected or focus
         //fm.close();
         removeBtn.enabled(true);
-        login.caption("Next");
-        login.enabled(true);
+        selectBtn.caption("Next");
+        selectBtn.enabled(true);
 
         });
 
@@ -128,7 +179,7 @@ int main()
     plc.field("removeBtn") << removeBtn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc.field("textboxs") << fname << lname << age << address;
-    plc.field("buttons") << cancel << login;
+    plc.field("buttons") << cancel << selectBtn;
     //Finially, the widgets should be collocated.
     //Do not miss this line, otherwise the widgets are not collocated
     //until the form is resized.
@@ -267,9 +318,9 @@ int main()
 
 
     fm1.show();
-    fm2.show();
-    fm3.show();
-    fm4.show();
+   //fm2.show();
+    //fm3.show();
+    //fm4.show();
 
     exec();
 

@@ -9,6 +9,7 @@ class Customer { // extends person
 
 public:
 	string firstname, lastname, address;
+	int id;
 	int age = 0;
 	int attrb_rental_id = -1;
 	int isFavorite = 1;
@@ -36,6 +37,9 @@ public:
 	void updateAttrb_Rental_Id(int);
 	void setReputation(int);
 	
+	bool operator==(const Customer& other) const {
+		return firstname == other.firstname && lastname == other.lastname;
+	}
 
 	~Customer();
 
