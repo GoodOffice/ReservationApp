@@ -3,6 +3,16 @@
 
 #pragma once
 
-#include <iostream>
+#ifndef ReservationApp_
+#define ReservationApp_
 
-// TODO: Reference additional headers your program requires here.
+#include "Vehicle.h"
+bool toggleView(int flag) {
+	if (flag == 1)
+		return true;
+	else
+		return false;
+
+}
+
+#endif
