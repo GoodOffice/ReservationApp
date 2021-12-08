@@ -11,6 +11,9 @@ Customer::Customer(string cs_fname) : firstname(cs_fname){ }
 /*Gets*/
 string Customer::getFirstName(){ return firstname; }
 string Customer::getLastName() { return lastname; }
+string Customer::getFullName() { 
+	/*fullName = firstname + " " + lastname;*/
+	return fullName; }
 string Customer::getAddress() {	return address; }
 int Customer::getAge() { return age; }
 int Customer::getAttrb_Rental_Id() { 
@@ -39,6 +42,9 @@ void Customer::getCustomer_Info() {
 /*Sets*/
 void Customer::setFirstName(string cs_fname) { firstname = cs_fname; }
 void Customer::setLastName(string cs_lname) { lastname = cs_lname; }
+void Customer::setFullName(string cs_fname, string cs_lname) { 
+	fullName = cs_fname + " " + cs_lname;
+}
 void Customer::setAddress(string cs_address) { address = cs_address; }
 void Customer::setAge(int a) { 
 	age = a; }

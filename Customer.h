@@ -8,7 +8,7 @@ using namespace std;
 class Customer { // extends person
 
 public:
-	string firstname, lastname, address;
+	string firstname, lastname, fullName, address;
 	int id;
 	int age = 0;
 	int attrb_rental_id = -1;
@@ -22,6 +22,7 @@ public:
 	/*Get Methods*/
 	string getFirstName();
 	string getLastName();
+	string getFullName();
 	string getAddress();
 	int getAge();
 	int getAttrb_Rental_Id();
@@ -31,6 +32,7 @@ public:
 	/*Set Methods*/
 	void setFirstName(string);
 	void setLastName(string);
+	void setFullName(string, string);
 	void setAddress(string);
 	void setAge(int);
 	void setAttrb_Rental_Id(int);

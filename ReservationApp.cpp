@@ -19,6 +19,14 @@
 #include <set>
 #include <algorithm>
 
+template <typename T>
+void removeElement(std::vector<T>& vec, size_t pos)
+{
+    std::vector<T>::iterator it = vec.begin();
+    std::advance(it, pos);
+    vec.erase(it);
+}
+
 int main()
 {
     using namespace std;
@@ -49,17 +57,34 @@ int main()
     label lab{ fm1, "Hello, <bold blue size=16>Customers</>" }, desc{ fm1, "Create a new customer or select from the list above to continue." };
     lab.format(true);
 
+    vector<Customer*> customers;
+    Customer* pChosenCustomer = nullptr;
+    int incr = 1;
     combox child(fm1, rectangle(20, 3, 150, 30));
     //child.push_back("Item 1");
     //child.push_back("Item 2");
     //child.push_back("Item 3");
     //child.push_back("Item 4");
-    child.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+    child.events().selected([&](const arg_combox& ar_cbx) {
+        std::cout << ar_cbx.widget.caption() << std::endl;
+        //auto custFilter = [&](auto cust) { return cust.getFullName().compare(txt) == 0; };
+        auto txt = child.text(child.option());
+
+        cout << "inSelected: " << txt << endl; // DEGUG
+
+        for (auto* cust : customers)
+        {
+            cout << "inSelected loop names: " << cust->getFullName() << endl; // // DEGUG
+            if (cust->getFullName().compare(txt) == 0)
+                pChosenCustomer = cust; //store the pointer to the chosen customer;
+        }
+        });
 
     /* ------- Customers <start>------- */
 
     textbox fname(fm1), lname(fm1), age(fm1), address(fm1);
     button removeBtn(fm1), selectBtn(fm1), cancel(fm1);
+    
 
     fname.tip_string("Firstname").multi_lines(false);
     lname.tip_string("Lastname").multi_lines(false);
@@ -73,9 +98,7 @@ int main()
     cancel.caption("Cancel");
 
     
-    vector<Customer*> customers;
 
-    int incr = 1;
 
     /* Creates a customer with textbox values*/
     selectBtn.events().click([&] {
@@ -91,6 +114,7 @@ int main()
         
         customer->setFirstName(fnameTyped);
         customer->setLastName(lnameTyped);
+        customer->setFullName(fnameTyped, lnameTyped);
         customer->setAge(stoi(ageTyped));
         customer->setAddress(addressType);
         customer->id = incr;
@@ -117,18 +141,60 @@ int main()
                     exist = false;
                     cout << "Customer is new." << endl;
                 }
-
             index++;
         }
-
 
         if (exist == false){
             customer->getCustomer_Info();
             customers.push_back(customer);
             string fullName = firstName + " " + lastName;
-            child.push_back(fullName);
+            child.push_back(fullName); // back to string
         }
 
+        });
+
+    child.events().focus([&] { // selected or focus
+
+        //toggleView(fl);
+        if (customers.empty()) {
+            cout << "List is empty." << endl; // DEGUG
+            removeBtn.enabled(false);
+        }
+
+        });
+
+    removeBtn.events().click([&] {
+        if(pChosenCustomer != nullptr){
+            cout << "Chosen customer is at least one." << endl; // DEBUG
+
+            int index = 0;
+            auto it = customers.begin();
+            while (it != customers.end())
+            {   
+                try {
+                    if (pChosenCustomer->getFullName() == customers.at(index)->fullName)
+                    {
+                        it = customers.erase(it);
+                        child.erase(index);
+                    }
+                    else {
+                        ++it;
+                    }
+                    ++index;
+                }
+                catch (out_of_range exc) // catching out of range exception
+                {
+                    cout << "Out of range exception" << endl;
+                    break;
+                }
+            }
+            //for (Customer* const& i : customers) {
+            //    std::cout << i << ' ';
+            //}
+        }
+        else {
+            cout << "Chosen customer is empty." << endl; // DEGUG
+        }
         });
 
     fname.events().focus([&selectBtn] { // selected or focus
@@ -140,15 +206,7 @@ int main()
 
 
 
-    child.events().focus([&] { // selected or focus
-        //fname.enabled(false);
-        //lname.enabled(false);
-        //age.enabled(false);
-        //address.enabled(false);
-        int fl = 1;
-        //toggleView(fl);
 
-        });
 
 
 
@@ -156,9 +214,11 @@ int main()
 
     child.events().selected([&] { // selected or focus
         //fm.close();
+
         removeBtn.enabled(true);
         selectBtn.caption("Next");
         selectBtn.enabled(true);
+
 
         });
 
