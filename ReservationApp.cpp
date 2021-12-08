@@ -59,7 +59,7 @@ int main()
 
     vector<Customer*> customers;
     Customer* pChosenCustomer = nullptr;
-    int incr = 1;
+    int customerIDincr = 1, locationIDIncr = 1, vehiculeIDIncr = 1, rentalIDIncr = 1;
     combox child(fm1, rectangle(20, 3, 150, 30));
     //child.push_back("Item 1");
     //child.push_back("Item 2");
@@ -83,7 +83,7 @@ int main()
     /* ------- Customers <start>------- */
 
     textbox fname(fm1), lname(fm1), age(fm1), address(fm1);
-    button removeBtn(fm1), selectBtn(fm1), cancel(fm1);
+    button removeBtn(fm1), validateCSButton(fm1), cancel(fm1);
     
 
     fname.tip_string("Firstname").multi_lines(false);
@@ -93,15 +93,15 @@ int main()
 
     removeBtn.caption("Remove");
     removeBtn.enabled(false);
-    selectBtn.caption("Add Customer");
-    selectBtn.enabled(false);
+    validateCSButton.caption("Add Customer");
+    validateCSButton.enabled(false);
     cancel.caption("Cancel");
 
     
 
 
     /* Creates a customer with textbox values*/
-    selectBtn.events().click([&] {
+    validateCSButton.events().click([&] {
         bool exist = false;
         string fnameTyped, lnameTyped, ageTyped, addressType;
         fname.getline(0, fnameTyped);
@@ -117,14 +117,14 @@ int main()
         customer->setFullName(fnameTyped, lnameTyped);
         customer->setAge(stoi(ageTyped));
         customer->setAddress(addressType);
-        customer->id = incr;
+        customer->id = customerIDincr;
 
         string firstName = fnameTyped;
         string lastName = lnameTyped;
         
 
-        cout << "\Customers size=" << customers.size() << endl;
-        incr++;
+        cout << "\nCustomers size=" << customers.size() << endl;
+        customerIDincr++;
         int index = 0;
         for (vector<Customer*>::iterator itr = customers.begin(); itr != customers.end(); itr++)
         {
@@ -139,7 +139,7 @@ int main()
                 }
                 else {
                     exist = false;
-                    cout << "Customer is new." << endl;
+                    cout << "Added a new customer." << endl;
                 }
             index++;
         }
@@ -147,8 +147,8 @@ int main()
         if (exist == false){
             customer->getCustomer_Info();
             customers.push_back(customer);
-            string fullName = firstName + " " + lastName;
-            child.push_back(fullName); // back to string
+            string fullNameString = firstName + " " + lastName;
+            child.push_back(fullNameString); // back to string
         }
 
         });
@@ -157,7 +157,7 @@ int main()
 
         //toggleView(fl);
         if (customers.empty()) {
-            cout << "List is empty." << endl; // DEGUG
+            cout << "Customer list is empty." << endl; // DEGUG
             removeBtn.enabled(false);
         }
 
@@ -197,10 +197,10 @@ int main()
         }
         });
 
-    fname.events().focus([&selectBtn] { // selected or focus
+    fname.events().focus([&] { // selected or focus
     //fm.close();
-        selectBtn.caption("Add Customer");
-        selectBtn.enabled(true);
+        validateCSButton.caption("Add Customer");
+        validateCSButton.enabled(true);
 
         });
 
@@ -216,8 +216,8 @@ int main()
         //fm.close();
 
         removeBtn.enabled(true);
-        selectBtn.caption("Next");
-        selectBtn.enabled(true);
+        validateCSButton.caption("Next");
+        validateCSButton.enabled(true);
 
 
         });
@@ -239,7 +239,7 @@ int main()
     plc.field("removeBtn") << removeBtn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc.field("textboxs") << fname << lname << age << address;
-    plc.field("buttons") << cancel << selectBtn;
+    plc.field("buttons") << cancel << validateCSButton;
     //Finially, the widgets should be collocated.
     //Do not miss this line, otherwise the widgets are not collocated
     //until the form is resized.
@@ -250,25 +250,126 @@ int main()
     label location_headerText{ fm2, "Hello, <bold red size=16>Locations</>" }, loc_screen_desc{ fm2, "You can add new rental locations to the database." };
     location_headerText.format(true);
 
-    textbox location_name(fm2);
-    button  remove_locationBtn(fm2), clear(fm2), validate_location(fm2);
+    vector<Location*> locations;
+    Location* pChosenLocation = nullptr;
 
-    location_name.tip_string("City").multi_lines(false);
+    combox droplistLOCView(fm2, rectangle(20, 3, 150, 30));
+    //droplistLOCView.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+
+    droplistLOCView.events().selected([&](const arg_combox& ar_cbx) {
+        std::cout << ar_cbx.widget.caption() << std::endl;
+        auto txt = droplistLOCView.text(droplistLOCView.option());
+
+        cout << "inSelected: " << txt << endl; // DEGUG
+
+        for (auto* loc : locations)
+        {
+            cout << "inSelected loop city: " << loc->getLocation_Name() << endl; // // DEGUG
+            if (loc->getLocation_Name().compare(txt) == 0)
+                pChosenLocation = loc; //store the pointer to the chosen customer;
+        }
+        });
+
+    textbox city_name(fm2);
+    button  remove_locationBtn(fm2), clear(fm2), validateLCButton(fm2);
+
+    city_name.tip_string("City").multi_lines(false);
     remove_locationBtn.caption("Remove");
     remove_locationBtn.enabled(false);
 
     clear.caption("Clear All");
     clear.enabled(false);
     
-    validate_location.caption("Add location");
-    validate_location.enabled(false);
+    validateLCButton.caption("Add location");
+    validateLCButton.enabled(false);
 
-    combox lc_droplist(fm2, rectangle(20, 3, 150, 30));
-    lc_droplist.push_back("O.. 1");
-    lc_droplist.push_back("W.. 2");
-    lc_droplist.push_back("S.. 3");
-    lc_droplist.push_back("U.. 4");
-    lc_droplist.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+    validateLCButton.events().click([&] {
+        bool exist = false;
+        string cityTyped;
+        city_name.getline(0, cityTyped);
+
+        Location* location = new Location();
+        location->setLocation_Name(cityTyped);
+        location->setLocation_Id(locationIDIncr);
+
+        cout << "\nLocation size=" << locations.size() << endl; // DEBUG
+        locationIDIncr++;
+        int index = 0;
+        for (vector<Location*>::iterator itr = locations.begin(); itr != locations.end(); itr++)
+        {
+            string comp_city = locations.at(index)->getLocation_Name();
+            cout << "comp_city: " << comp_city << endl;
+            if (cityTyped == comp_city) {
+                exist = true;
+                cout << "This location exists already." << endl;
+                break;
+            }
+            else {
+                exist = false;
+                cout << "Added a new location." << endl;
+            }
+            index++;
+        }
+
+        if (exist == false) {
+            location->getLocation_Info();
+            locations.push_back(location);
+            string cityString = location->getLocation_Name();
+            droplistLOCView.push_back(cityString); // back to string
+        }
+
+    });
+
+    remove_locationBtn.events().click([&] {
+        if (pChosenLocation != nullptr) {
+            cout << "Chosen location is at least one." << endl; // DEBUG
+
+            int index = 0;
+            auto it = locations.begin();
+            while (it != locations.end())
+            {
+                try {
+                    if (pChosenLocation->getLocation_Name()== locations.at(index)->location_name)
+                    {
+                        it = locations.erase(it);
+                        droplistLOCView.erase(index);
+                    }
+                    else {
+                        ++it;
+                    }
+                    ++index;
+                }
+                catch (out_of_range exc) // catching out of range exception
+                {
+                    cout << "Out of range exception" << endl;
+                    break;
+                }
+            }
+        }
+        else {
+            cout << "Chosen location is empty." << endl; // DEGUG
+        }
+        });
+
+    city_name.events().focus([&] { // selected or focus
+    //fm.close();
+        validateLCButton.caption("Add Location");
+        validateLCButton.enabled(true);
+
+     });
+
+        droplistLOCView.events().focus([&] { // selected or focus
+            if (locations.empty()) {
+                cout << "Location list is empty." << endl; // DEGUG
+                remove_locationBtn.enabled(false);
+            }
+            });
+
+    droplistLOCView.events().selected([&] { // selected or focus
+        remove_locationBtn.enabled(true);
+        validateLCButton.caption("Next");
+        remove_locationBtn.enabled(true);
+            });
 
 
     place plc_location(fm2);
@@ -279,37 +380,137 @@ int main()
     //Insert widgets
     plc_location.field("title") << location_headerText;
     plc_location.field("description") << loc_screen_desc;
-    plc_location.field("droplist") << lc_droplist;
+    plc_location.field("droplist") << droplistLOCView;
     plc_location.field("removeBtn") << remove_locationBtn;
-    //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
-    plc_location.field("textboxs") << location_name;
-    plc_location.field("buttons") << clear << validate_location;
+    plc_location.field("textboxs") << city_name;
+    plc_location.field("buttons") << clear << validateLCButton;
 
 
     /* ------- Location </end> ------- */
 
+
     label vehicle_headerText{ fm3, "Hello, <bold green size=16>Vehicles</>" }, veh_screen_desc{ fm3, "You can add new vehicles to the repository." };
     vehicle_headerText.format(true);
 
-    textbox vehicle_name(fm3);
-    button  remove_vehicleBtn(fm3), clear_veh(fm3), validate_vehicle(fm3);
+    vector<Vehicle*> vehicles;
+    Vehicle* pChosenVehicle = nullptr;
 
-    vehicle_name.tip_string("Car Model").multi_lines(false);
+    combox droplistVEHView(fm3, rectangle(20, 3, 150, 30));
+
+    droplistVEHView.events().selected([&](const arg_combox& ar_cbx) {
+        std::cout << ar_cbx.widget.caption() << std::endl;
+        auto txt = droplistVEHView.text(droplistVEHView.option());
+
+        cout << "inSelected: " << txt << endl; // DEGUG
+
+        for (auto* veh : vehicles)
+        {
+            cout << "inSelected loop city: " << veh->getVehicle_Name() << endl; // // DEGUG
+            if (veh->getVehicle_Name().compare(txt) == 0)
+                pChosenVehicle = veh; //store the pointer to the chosen customer;
+        }
+        });
+
+    textbox vehicle_name(fm3);
+    button  remove_vehicleBtn(fm3), clear_veh(fm3), validateVHButton(fm3);
+
+    vehicle_name.tip_string("Vehicle Model").multi_lines(false);
     remove_vehicleBtn.caption("Remove");
     remove_vehicleBtn.enabled(false);
 
     clear_veh.caption("Clear All");
     clear_veh.enabled(false);
 
-    validate_vehicle.caption("Add car");
-    validate_vehicle.enabled(false);
+    validateVHButton.caption("Add car");
+    validateVHButton.enabled(false);
 
-    combox veh_droplist(fm3, rectangle(20, 3, 150, 30));
-    veh_droplist.push_back("Avantador");
-    veh_droplist.push_back("Urus");
-    veh_droplist.push_back("Range Rover");
-    veh_droplist.push_back("Mercedes 4Matic");
-    veh_droplist.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+    validateVHButton.events().click([&] {
+        bool exist = false;
+        string vehicleTyped;
+        vehicle_name.getline(0, vehicleTyped);
+
+        Vehicle* vehicle = new Vehicle();
+        vehicle->setVehicle_Name(vehicleTyped);
+        vehicle->setVehicle_Id(vehiculeIDIncr);
+
+        cout << "\Vehicle size=" << vehicles.size() << endl; // DEBUG
+        vehiculeIDIncr++;
+        int index = 0;
+        for (vector<Vehicle*>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
+        {
+            string comp_car = vehicles.at(index)->getVehicle_Name();
+            cout << "comp_car: " << comp_car << endl;
+            if (vehicleTyped == comp_car) {
+                exist = true;
+                cout << "This vehicle exists already." << endl;
+                break;
+            }
+            else {
+                exist = false;
+                cout << "Added a new vehicle." << endl;
+            }
+            index++;
+        }
+
+        if (exist == false) {
+            vehicle->getVehicle_Info();
+            vehicles.push_back(vehicle);
+            string locationString = vehicle->getVehicle_Name();
+            droplistVEHView.push_back(locationString); // back to string
+        }
+
+     });
+
+
+    remove_vehicleBtn.events().click([&] {
+        if (pChosenVehicle != nullptr) {
+            cout << "Chosen vehicle is at least one." << endl; // DEBUG
+
+            int index = 0;
+            auto it = vehicles.begin();
+            while (it != vehicles.end())
+            {
+                try {
+                    if (pChosenVehicle->getVehicle_Name() == vehicles.at(index)->vehicle_name)
+                    {
+                        it = vehicles.erase(it);
+                        droplistVEHView.erase(index);
+                    }
+                    else {
+                        ++it;
+                    }
+                    ++index;
+                }
+                catch (out_of_range exc) // catching out of range exception
+                {
+                    cout << "Out of range exception" << endl;
+                    break;
+                }
+            }
+        }
+        else {
+            cout << "Chosen vehicle is empty." << endl; // DEGUG
+        }
+        });
+
+    vehicle_name.events().focus([&] { // selected or focus
+        validateVHButton.caption("Add Vehicle");
+        validateVHButton.enabled(true);
+        });
+
+    droplistVEHView.events().focus([&] { // selected or focus
+        if (vehicles.empty()) {
+            cout << "Vehicle list is empty." << endl; // DEGUG
+            remove_locationBtn.enabled(false);
+        }
+        });
+
+    droplistVEHView.events().selected([&] { // selected or focus
+        remove_vehicleBtn.enabled(true);
+        validateVHButton.caption("Next");
+        remove_vehicleBtn.enabled(true);
+        });
+
 
 
     place plc_vehicle(fm3);
@@ -320,17 +521,26 @@ int main()
     //Insert widgets
     plc_vehicle.field("title") << vehicle_headerText;
     plc_vehicle.field("description") << veh_screen_desc;
-    plc_vehicle.field("droplist") << veh_droplist;
+    plc_vehicle.field("droplist") << droplistVEHView;
     plc_vehicle.field("removeBtn") << remove_vehicleBtn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc_vehicle.field("textboxs") << vehicle_name;
-    plc_vehicle.field("buttons") << clear_veh << validate_vehicle;
+    plc_vehicle.field("buttons") << clear_veh << validateVHButton;
 
     /* ------- Vehicle </end> ------- */
 
+    vector<Rental*> rentals;
+    Rental* pChosenRental = nullptr;
 
     label rental_headerText{ fm4, "Hello, <bold black size=16>Rentals</>" }, rental_screen_desc{ fm4, "You can add new rentals to the repository." };
     rental_headerText.format(true);
+
+    combox rental_droplist(fm4, rectangle(20, 3, 150, 30));
+    rental_droplist.push_back("Rental 1 - Customer A");
+    rental_droplist.push_back("Rental 2 - Customer B");
+    rental_droplist.push_back("Rental 3 - Customer C");
+    rental_droplist.push_back("Rental 4 - Customer D");
+    rental_droplist.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
 
     textbox rental_startDate(fm4), rental_endDate(fm4);
     button  remove_rentalBtn(fm4), clear_rental(fm4), validate_rental(fm4);
@@ -346,12 +556,7 @@ int main()
     validate_rental.caption("Submit Rental");
     validate_rental.enabled(false);
 
-    combox rental_droplist(fm4, rectangle(20, 3, 150, 30));
-   rental_droplist.push_back("Rental 1 - Customer A");
-   rental_droplist.push_back("Rental 2 - Customer B");
-   rental_droplist.push_back("Rental 3 - Customer C");
-   rental_droplist.push_back("Rental 4 - Customer D");
-   rental_droplist.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+
 
 
     place plc_rental(fm4);
@@ -378,8 +583,8 @@ int main()
 
 
     fm1.show();
-   //fm2.show();
-    //fm3.show();
+    fm2.show();
+    fm3.show();
     //fm4.show();
 
     exec();
