@@ -1,5 +1,4 @@
-﻿// ReservationApp.cpp : Defines the entry point for the application.
-//
+﻿// ReservationApp.cpp : Defines the entry point for the application.//
 
 #include "ReservationApp.h"
 #include <nana/gui.hpp>
@@ -20,7 +19,7 @@
 #include <algorithm>
 
 template <typename T>
-void removeElement(std::vector<T>& vec, size_t pos)
+void removeElement(std::vector<T>&vec, size_t pos)
 {
     std::vector<T>::iterator it = vec.begin();
     std::advance(it, pos);
@@ -32,7 +31,7 @@ int main()
     using namespace std;
     using namespace nana;
 
-   
+
     //Define widgets
     auto s = screen();
     auto pa = s.get_primary().workarea();
@@ -75,9 +74,14 @@ int main()
 
         for (auto* cust : customers)
         {
-            cout << "inSelected loop names: " << cust->getFullName() << endl; // // DEGUG
-            if (cust->getFullName().compare(txt) == 0)
+            cout << "inSelected loop names: " << cust->getFullName() << endl;  // DEGUG
+            if (cust->getFullName().compare(txt) == 0) {
                 pChosenCustomer = cust; //store the pointer to the chosen customer;
+                cout << "inSelected: Current user: " << customer->fullName << endl; // DEGUG
+                cout << "inSelected: USER: " << pChosenCustomer->fullName << endl; // DEGUG
+                customer = pChosenCustomer;
+                cout << "inSelected: Current user: (AFTER) " << customer->fullName << endl; // DEGUG
+            }
         }
         });
 
@@ -85,7 +89,7 @@ int main()
 
     textbox fname(fm1), lname(fm1), age(fm1), address(fm1);
     button removeBtn(fm1), validateCSButton(fm1), cancel(fm1);
-    
+
 
     fname.tip_string("Firstname").multi_lines(false);
     lname.tip_string("Lastname").multi_lines(false);
@@ -98,7 +102,7 @@ int main()
     validateCSButton.enabled(false);
     cancel.caption("Cancel");
 
-    
+
 
 
     /* Creates a customer with textbox values*/
@@ -112,7 +116,7 @@ int main()
 
         //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
         customer = new Customer();
-        
+
         customer->setFirstName(fnameTyped);
         customer->setLastName(lnameTyped);
         customer->setFullName(fnameTyped, lnameTyped);
@@ -122,30 +126,30 @@ int main()
 
         string firstName = fnameTyped;
         string lastName = lnameTyped;
-        
+
 
         cout << "\nCustomers size=" << customers.size() << endl;
         customerIDincr++;
         int index = 0;
         for (vector<Customer*>::iterator itr = customers.begin(); itr != customers.end(); itr++)
         {
-                string comp_fname = customers.at(index)->getFirstName();
-                string comp_lname = customers.at(index)->getLastName();
-                cout << "comp_firstname: " << comp_fname << endl;
-                cout << "comp_lastname: " << comp_lname << endl;
-                if (firstName == comp_fname && lastName == comp_lname) {
-                    exist = true;
-                    cout << "Customer already exists." << endl;
-                    break;
-                }
-                else {
-                    exist = false;
-                    cout << "Added a new customer." << endl;
-                }
+            string comp_fname = customers.at(index)->getFirstName();
+            string comp_lname = customers.at(index)->getLastName();
+            cout << "comp_firstname: " << comp_fname << endl;
+            cout << "comp_lastname: " << comp_lname << endl;
+            if (firstName == comp_fname && lastName == comp_lname) {
+                exist = true;
+                cout << "Customer already exists." << endl;
+                break;
+            }
+            else {
+                exist = false;
+                cout << "Added a new customer." << endl;
+            }
             index++;
         }
 
-        if (exist == false){
+        if (exist == false) {
             customer->getCustomer_Info();
             customers.push_back(customer);
             string fullNameString = firstName + " " + lastName;
@@ -165,13 +169,13 @@ int main()
         });
 
     removeBtn.events().click([&] {
-        if(pChosenCustomer != nullptr){
+        if (pChosenCustomer != nullptr) {
             cout << "Chosen customer is at least one." << endl; // DEBUG
 
             int index = 0;
             auto it = customers.begin();
             while (it != customers.end())
-            {   
+            {
                 try {
                     if (pChosenCustomer->getFullName() == customers.at(index)->fullName)
                     {
@@ -267,8 +271,14 @@ int main()
         for (auto* loc : locations)
         {
             cout << "inSelected loop city: " << loc->getLocation_Name() << endl; // // DEGUG
-            if (loc->getLocation_Name().compare(txt) == 0)
+            if (loc->getLocation_Name().compare(txt) == 0) {
                 pChosenLocation = loc; //store the pointer to the chosen customer;
+                cout << "inSelected: Current location: " << location->getLocation_Name() << endl; // DEGUG
+                cout << "inSelected: LOCATION: " << pChosenLocation->getLocation_Name() << endl; // DEGUG
+                location = pChosenLocation;
+                cout << "inSelected: Current location: (AFTER) " << location->getLocation_Name() << endl; // DEGUG
+
+            }
         }
         });
 
@@ -281,7 +291,7 @@ int main()
 
     clear.caption("Clear All");
     clear.enabled(false);
-    
+
     validateLCButton.caption("Add location");
     validateLCButton.enabled(false);
 
@@ -320,7 +330,7 @@ int main()
             droplistLOCView.push_back(cityString); // back to string
         }
 
-    });
+        });
 
     remove_locationBtn.events().click([&] {
         if (pChosenLocation != nullptr) {
@@ -331,7 +341,7 @@ int main()
             while (it != locations.end())
             {
                 try {
-                    if (pChosenLocation->getLocation_Name()== locations.at(index)->location_name)
+                    if (pChosenLocation->getLocation_Name() == locations.at(index)->location_name)
                     {
                         it = locations.erase(it);
                         droplistLOCView.erase(index);
@@ -358,27 +368,27 @@ int main()
         validateLCButton.caption("Add Location");
         validateLCButton.enabled(true);
 
-     });
+        });
 
-        droplistLOCView.events().focus([&] { // selected or focus
-            if (locations.empty()) {
-                cout << "Location list is empty." << endl; // DEGUG
-                remove_locationBtn.enabled(false);
-            }
-            });
+    droplistLOCView.events().focus([&] { // selected or focus
+        if (locations.empty()) {
+            cout << "Location list is empty." << endl; // DEGUG
+            remove_locationBtn.enabled(false);
+        }
+        });
 
     droplistLOCView.events().selected([&] { // selected or focus
         remove_locationBtn.enabled(true);
         validateLCButton.caption("Next");
         remove_locationBtn.enabled(true);
-            });
+        });
 
 
     place plc_location(fm2);
 
     // Divide the form into fields
     plc_location.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist>  < weight=5%> <weight=25 removeBtn> < weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
-    
+
     //Insert widgets
     plc_location.field("title") << location_headerText;
     plc_location.field("description") << loc_screen_desc;
@@ -409,8 +419,14 @@ int main()
         for (auto* veh : vehicles)
         {
             cout << "inSelected loop city: " << veh->getVehicle_Name() << endl; // // DEGUG
-            if (veh->getVehicle_Name().compare(txt) == 0)
+            if (veh->getVehicle_Name().compare(txt) == 0) {
                 pChosenVehicle = veh; //store the pointer to the chosen customer;
+                cout << "inSelected: Current vehicle: " << vehicle->getVehicle_Name() << endl; // DEGUG
+                cout << "inSelected: VEHICLE: " << pChosenVehicle->getVehicle_Name() << endl; // DEGUG
+                vehicle = pChosenVehicle;
+                cout << "inSelected: Current vehicle: (AFTER) " << vehicle->getVehicle_Name() << endl; // DEGUG
+
+            }
         }
         });
 
@@ -456,13 +472,15 @@ int main()
         }
 
         if (exist == false) {
+            location->addVehicles(vehicle);
             vehicle->getVehicle_Info();
+            location->getLocation_Info();
             vehicles.push_back(vehicle);
             string locationString = vehicle->getVehicle_Name();
             droplistVEHView.push_back(locationString); // back to string
         }
 
-     });
+        });
 
 
     remove_vehicleBtn.events().click([&] {
@@ -605,10 +623,10 @@ int main()
         string rep = " ";
         if (designation == 0)
             rep = "Regular Customer";
-        else if(designation == 1)
+        else if (designation == 1)
             rep = "Preferred Customer";
 
-        rental_screen_desc.caption(name + "\n" + 
+        rental_screen_desc.caption(name + "\n" +
             address +
             to_string(age) + " ~ years old " + "\n" +
             "Reputation: " + rep + "\n" +
@@ -616,12 +634,12 @@ int main()
 
 
 
-            
 
-        
-        
+
+
+
         );
-    });
+        });
 
 
     viewActiveRentedCarBttn.events().click([&] {
@@ -684,8 +702,8 @@ int main()
 
     //Insert widgets
     plc_rental.field("title") << rental_headerText;
-    plc_rental.field("description") <<rental_screen_desc;
-   // plc_rental.field("droplist") << droplistRENTALView;
+    plc_rental.field("description") << rental_screen_desc;
+    // plc_rental.field("droplist") << droplistRENTALView;
     plc_rental.field("actionButtons") << simulateBtn << viewActiveRentedCarBttn << viewLateReturnCarBttn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc_rental.field("textboxs") << rental_startDate << rental_endDate;
@@ -710,4 +728,3 @@ int main()
 
 
 }
-

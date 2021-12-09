@@ -38,7 +38,21 @@ void Location::setLocation_Id(int loc_id) { this->location_id = loc_id; }
 void Location::setLocation_Name(string loc_name) { this->location_name = loc_name; }
 void Location::setLocation_Status(int loc_status) { this->location_status = loc_status; }
 
-void Location::addVehicles(Vehicle* v ) {
+//void Location::addVehicles(Vehicle* v ) {
+//	/*TO_DO: add a list of vehicles*/
+//	v->getVehicle_Id();
+//	v->setVehicle_Location_Id(location_id); // // setting id to current vehicle instance
+//	this->location_Veh = v;
+//	/*Assigning vehicles to location*/
+//	this->setVehicle_Location_Id(location_id); // setting vehicle's location_id property to current location instance
+//	this->setVehicle_Id(v->getVehicle_Id()); // setting location's id property to current location instance
+//	this->setVehicle_Name(v->getVehicle_Name()); // setting location's name property to current location instance
+//	//this->setLocation_Id(location_id);
+//	
+//	capacity++;
+//}
+
+void Location::addVehicles(Vehicle* v) {
 	/*TO_DO: add a list of vehicles*/
 	v->getVehicle_Id();
 	v->setVehicle_Location_Id(location_id); // // setting id to current vehicle instance
@@ -48,7 +62,7 @@ void Location::addVehicles(Vehicle* v ) {
 	this->setVehicle_Id(v->getVehicle_Id()); // setting location's id property to current location instance
 	this->setVehicle_Name(v->getVehicle_Name()); // setting location's name property to current location instance
 	//this->setLocation_Id(location_id);
-	
+
 	capacity++;
 }
 Location::~Location() { }
