@@ -3,7 +3,9 @@
 #ifndef Location_
 #define Location_
 #include <iostream>
+#include<vector>
 #include "Vehicle.h"
+
 using namespace std;
 
 class Location : public Vehicle {
@@ -14,7 +16,7 @@ public:
 	int location_status = 0;
 	int capacity = 0;
 	Vehicle* location_Veh;
-
+	vector<Vehicle*> vehicles;
 	Location();
 	Location(int, string);
 	//Location(int, string, bool);
@@ -34,6 +36,7 @@ public:
 	~Location();
 
 	void addVehicles(Vehicle*);
+	vector<Vehicle*> getVehicles();
 
 };
 #endif

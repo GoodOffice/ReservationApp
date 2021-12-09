@@ -260,6 +260,9 @@ int main()
     Location* pChosenLocation = nullptr;
 
     combox droplistLOCView(fm2, rectangle(20, 3, 150, 30));
+
+    vector<Vehicle*> vehicles;
+    combox droplistVEHView(fm3, rectangle(20, 3, 150, 30));
     //droplistLOCView.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
 
     droplistLOCView.events().selected([&](const arg_combox& ar_cbx) {
@@ -280,6 +283,7 @@ int main()
 
             }
         }
+
         });
 
     textbox city_name(fm2);
@@ -326,6 +330,7 @@ int main()
         if (exist == false) {
             location->getLocation_Info();
             locations.push_back(location);
+            droplistVEHView.clear();
             string cityString = location->getLocation_Name();
             droplistLOCView.push_back(cityString); // back to string
         }
@@ -377,10 +382,37 @@ int main()
         }
         });
 
+    bool clearVEHList = false;
+
+    
+
     droplistLOCView.events().selected([&] { // selected or focus
         remove_locationBtn.enabled(true);
         validateLCButton.caption("Next");
         remove_locationBtn.enabled(true);
+
+        city_name.caption(""); // clearing textbox
+        droplistVEHView.enabled(true);
+        droplistVEHView.clear();
+        //droplistVEHView.caption("test");
+        int locationCapacity = location->getCapacity();
+
+        if (locationCapacity < 0) {
+            droplistVEHView.caption("");
+
+        }
+        else {
+            droplistVEHView.caption("");
+            vehicles = location->getVehicles();
+            //vector<Vehicle*> veh = location->getVehicles();
+
+            for (int i = 0; i < locationCapacity; i++) {
+
+                droplistVEHView.push_back(vehicles.at(i)->getVehicle_Name());
+
+            }
+        }
+
         });
 
 
@@ -404,11 +436,11 @@ int main()
     label vehicle_headerText{ fm3, "Hello, <bold green size=16>Vehicles</>" }, veh_screen_desc{ fm3, "You can add new vehicles to the repository." };
     vehicle_headerText.format(true);
 
-    vector<Vehicle*> vehicles;
+    
     Vehicle* vehicle;
     Vehicle* pChosenVehicle = nullptr;
 
-    combox droplistVEHView(fm3, rectangle(20, 3, 150, 30));
+    droplistVEHView.enabled(false);
 
     droplistVEHView.events().selected([&](const arg_combox& ar_cbx) {
         std::cout << ar_cbx.widget.caption() << std::endl;
@@ -452,7 +484,7 @@ int main()
         vehicle->setVehicle_Name(vehicleTyped);
         vehicle->setVehicle_Id(vehiculeIDIncr);
 
-        cout << "\Vehicle size=" << vehicles.size() << endl; // DEBUG
+        cout << "\nVehicle size=" << vehicles.size() << endl; // DEBUG
         vehiculeIDIncr++;
         int index = 0;
         for (vector<Vehicle*>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
@@ -473,6 +505,7 @@ int main()
 
         if (exist == false) {
             location->addVehicles(vehicle);
+            location->getVehicles();
             vehicle->getVehicle_Info();
             location->getLocation_Info();
             vehicles.push_back(vehicle);
@@ -530,6 +563,7 @@ int main()
         remove_vehicleBtn.enabled(true);
         validateVHButton.caption("Next");
         remove_vehicleBtn.enabled(true);
+        vehicle_name.caption("");
         });
 
 
@@ -719,10 +753,10 @@ int main()
 
 
 
-    fm1.show();
+    //fm1.show();
     fm2.show();
     fm3.show();
-    fm4.show();
+    //fm4.show();
 
     exec();
 

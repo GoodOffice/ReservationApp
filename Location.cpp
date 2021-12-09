@@ -2,6 +2,7 @@
 
 
 #include "Location.h"
+#include <vector>
 #include <map>
 
 Location::Location(){ }
@@ -57,12 +58,41 @@ void Location::addVehicles(Vehicle* v) {
 	v->getVehicle_Id();
 	v->setVehicle_Location_Id(location_id); // // setting id to current vehicle instance
 	this->location_Veh = v;
-	/*Assigning vehicles to location*/
+	/*Assigning vehicle to location*/
 	this->setVehicle_Location_Id(location_id); // setting vehicle's location_id property to current location instance
 	this->setVehicle_Id(v->getVehicle_Id()); // setting location's id property to current location instance
 	this->setVehicle_Name(v->getVehicle_Name()); // setting location's name property to current location instance
 	//this->setLocation_Id(location_id);
 
+	//vector<Vehicle*> vehicles;
+	vehicles.push_back(v);
+	
+
+
 	capacity++;
+	cout << "\nLocation.cpp:: addVehicles - Vehicles size=" << vehicles.size() << endl;
+	cout << "\nLocation.cpp:: addVehicles - Loaction-Capacity size=" << capacity << endl;
+	
 }
+
+vector<Vehicle*> Location::getVehicles() {
+	int index = 0;
+	for (vector<Vehicle*>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
+	{
+		try {
+			/*vehicles.push_back(v);*/
+			cout << "Location.cpp:: addVehicles - LOCATION: " << this->getLocation_Name() << " has " << vehicles.at(index)->getVehicle_Name() << endl;
+		}
+		catch (out_of_range exc)
+		{
+			cout << "Out of range exception" << endl;
+		}
+
+		index++;
+	}
+	return vehicles;
+}
+
+
+
 Location::~Location() { }

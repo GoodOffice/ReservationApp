@@ -17,10 +17,11 @@ int Vehicle::getVehicle_Id() { return this->vehicle_id; }
 string Vehicle::getVehicle_Name() { return vehicle_name; }
 int Vehicle::getVehicle_Location_Id() { return vehicle_location_id; }
 bool Vehicle::getVehicle_Status() { 
-	if(status == isUnAvailable )
-		cout << "Vehicle.cpp:: getVehicle_Status - Status: This vehicule is currently rented out. Sorry " << endl;
-	else
-		cout << "Vehicle.cpp:: getVehicle_Status - Status: This vehicule is available for rent " << endl;
+	//if(status == isUnAvailable )
+	//	cout << "Vehicle.cpp:: getVehicle_Status - Status: This vehicule is currently rented out. Sorry " << endl;
+	//else if (status == isAvailable) {
+	//	cout << "Vehicle.cpp:: getVehicle_Status - Status: This vehicule is available for rent " << endl;
+	//}
 	return status; }
 void Vehicle::getVehicle_Info() {
 	if (getVehicle_Id() != NULL)
