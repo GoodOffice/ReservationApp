@@ -11,7 +11,7 @@
 class Rental {
 public:
 	int rental_id = 0;
-		int start_date, return_date;
+		int start_date = 0, return_date = 0;
 		int time_elapsed = 0;
 		int days_count = 0;
 	Customer* cstm;
@@ -29,8 +29,9 @@ public:
 	void createNewRental(Customer* customer) {
 
 		setRentalCustomer(customer);
-		rental_id++;
-		customer->setAttrb_Rental_Id(rental_id);
+		rental_id++;		
+		customer->setAttrb_Rental_Id(rental_id); // DEBUG - comment out to skip exception
+
 	}
 
 	void setRental_Repository(Repository* repository) {
@@ -107,8 +108,8 @@ public:
 		return start_date;
 	}
 
-	void setBegins_Date(int start) {
-		start_date = start;
+	void setBegins_Date(string start) {
+		start_date = stoi(start);
 
 	}
 
@@ -117,8 +118,8 @@ public:
 		return return_date;
 	}
 
-	void setReturn_Date(int end) {
-		return_date = end;
+	void setReturn_Date(string end) {
+		return_date = stoi(end);
 	}
 
 	void bonoCheck(Customer* customer) {

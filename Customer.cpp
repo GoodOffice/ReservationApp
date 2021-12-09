@@ -37,6 +37,7 @@ void Customer::getCustomer_Info() {
 		cout << "Customer.cpp:: getCustomer_Info -> getReputation: is preferred " << endl;
 	else
 		cout << "Customer.cpp:: getCustomer_Info -> getReputation:has no designation " << endl;
+
 }
 
 /*Sets*/

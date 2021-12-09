@@ -58,6 +58,7 @@ int main()
     lab.format(true);
 
     vector<Customer*> customers;
+    Customer* customer;
     Customer* pChosenCustomer = nullptr;
     int customerIDincr = 1, locationIDIncr = 1, vehiculeIDIncr = 1, rentalIDIncr = 1;
     combox child(fm1, rectangle(20, 3, 150, 30));
@@ -110,7 +111,7 @@ int main()
         address.getline(0, addressType);
 
         //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
-        Customer* customer = new Customer();
+        customer = new Customer();
         
         customer->setFirstName(fnameTyped);
         customer->setLastName(lnameTyped);
@@ -251,6 +252,7 @@ int main()
     location_headerText.format(true);
 
     vector<Location*> locations;
+    Location* location;
     Location* pChosenLocation = nullptr;
 
     combox droplistLOCView(fm2, rectangle(20, 3, 150, 30));
@@ -288,7 +290,7 @@ int main()
         string cityTyped;
         city_name.getline(0, cityTyped);
 
-        Location* location = new Location();
+        location = new Location();
         location->setLocation_Name(cityTyped);
         location->setLocation_Id(locationIDIncr);
 
@@ -393,6 +395,7 @@ int main()
     vehicle_headerText.format(true);
 
     vector<Vehicle*> vehicles;
+    Vehicle* vehicle;
     Vehicle* pChosenVehicle = nullptr;
 
     combox droplistVEHView(fm3, rectangle(20, 3, 150, 30));
@@ -429,7 +432,7 @@ int main()
         string vehicleTyped;
         vehicle_name.getline(0, vehicleTyped);
 
-        Vehicle* vehicle = new Vehicle();
+        vehicle = new Vehicle();
         vehicle->setVehicle_Name(vehicleTyped);
         vehicle->setVehicle_Id(vehiculeIDIncr);
 
@@ -529,49 +532,164 @@ int main()
 
     /* ------- Vehicle </end> ------- */
 
-    vector<Rental*> rentals;
-    Rental* pChosenRental = nullptr;
-
-    label rental_headerText{ fm4, "Hello, <bold black size=16>Rentals</>" }, rental_screen_desc{ fm4, "You can add new rentals to the repository." };
+    label rental_headerText{ fm4, "Hello, <bold black size=16>Rentals</>" }, rental_screen_desc{ fm4, "Details: --" };
     rental_headerText.format(true);
 
-    combox rental_droplist(fm4, rectangle(20, 3, 150, 30));
-    rental_droplist.push_back("Rental 1 - Customer A");
-    rental_droplist.push_back("Rental 2 - Customer B");
-    rental_droplist.push_back("Rental 3 - Customer C");
-    rental_droplist.push_back("Rental 4 - Customer D");
-    rental_droplist.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+    vector<Rental*> rentals;
+    Rental* rental;
+    Rental* pChosenRental = nullptr;
+
+    //combox droplistRENTALView(fm4, rectangle(20, 3, 150, 30));
+
+    //droplistRENTALView.events().selected([&](const arg_combox& ar_cbx) {
+    //    std::cout << ar_cbx.widget.caption() << std::endl;
+    //    auto txt = droplistRENTALView.text(droplistRENTALView.option());
+
+    //    cout << "inSelected: " << txt << endl; // DEGUG
+
+    //    for (auto* rtl : rentals)
+    //    {
+    //        cout << "inSelected loop city: " << rtl->getRentalVehicle()->getVehicle_Name() << endl; // // DEGUG
+    //        if (rtl->getRentalVehicle()->getVehicle_Name().compare(txt) == 0)
+    //            pChosenRental = rtl; //store the pointer to the chosen customer;
+    //    }
+    //    });
 
     textbox rental_startDate(fm4), rental_endDate(fm4);
-    button  remove_rentalBtn(fm4), clear_rental(fm4), validate_rental(fm4);
+    button  viewActiveRentedCarBttn(fm4), viewLateReturnCarBttn(fm4), simulateBtn(fm4), returnBttn(fm4), validateRETLButton(fm4);
 
     rental_startDate.tip_string("Start date").multi_lines(false);
     rental_endDate.tip_string("End date").multi_lines(false);
-    remove_rentalBtn.caption("Remove");
-    remove_rentalBtn.enabled(false);
+    viewActiveRentedCarBttn.caption("View all Active Rentals ");
+    viewActiveRentedCarBttn.enabled(true);
 
-    clear_rental.caption("Return a car");
-    clear_rental.enabled(false);
+    viewLateReturnCarBttn.caption("View all Late Returns ");
+    viewLateReturnCarBttn.enabled(true);
 
-    validate_rental.caption("Submit Rental");
-    validate_rental.enabled(false);
+    simulateBtn.caption("Simulate (skip days)");
+    simulateBtn.enabled(false);
 
+    returnBttn.caption("Return a car");
+    returnBttn.enabled(false);
+
+    validateRETLButton.caption("Create Rental");
+    //validateRETLButton.enabled(false);
+
+    validateRETLButton.events().click([&] {
+        bool exist = false;
+        string beginDateTyped, endDateTyped;
+        rental_startDate.getline(0, beginDateTyped);
+        rental_endDate.getline(0, endDateTyped);
+
+        rental = new Rental();
+        rental->createNewRental(customer);
+        rental->setBegins_Date(beginDateTyped);
+        rental->setReturn_Date(endDateTyped);
+        rental->getBegins_Date();
+        rental->getReturn_Date();
+
+        rental->getRentalCustomer()->getCustomer_Info();
+        string name = rental->getRentalCustomer()->getFullName();
+        string address = rental->getRentalCustomer()->getAddress();
+        int age = rental->getRentalCustomer()->getAge();
+        int  designation = rental->getRentalCustomer()->getReputation();
+
+        //Repository* repository = new Repository();
+       // rental->setRental_Repository(repository);
+
+        rental->setRentalLocation(location);
+        Location* rentingLocation = rental->getRentalLocation();
+        rental->setRentalVehicle(vehicle);
+        Vehicle* rentingVehicle = rental->getRentalVehicle();
+        string veh_name = rentingVehicle->getVehicle_Name();
+        string rep = " ";
+        if (designation == 0)
+            rep = "Regular Customer";
+        else if(designation == 1)
+            rep = "Preferred Customer";
+
+        rental_screen_desc.caption(name + "\n" + 
+            address +
+            to_string(age) + " ~ years old " + "\n" +
+            "Reputation: " + rep + "\n" +
+            "Model: " + veh_name
+
+
+
+            
+
+        
+        
+        );
+    });
+
+
+    viewActiveRentedCarBttn.events().click([&] {
+        if (pChosenRental != nullptr) {
+            cout << "Chosen rentals is at least one." << endl; // DEBUG
+
+            int index = 0;
+            auto it = rentals.begin();
+            while (it != rentals.end())
+            {
+                try {
+                    if (pChosenRental->getRentalVehicle()->getVehicle_Name() == rentals.at(index)->getRentalVehicle()->getVehicle_Name())
+                    {
+                        it = rentals.erase(it);
+                        //droplistRENTALView.erase(index);
+                    }
+                    else {
+                        ++it;
+                    }
+                    ++index;
+                }
+                catch (out_of_range exc) // catching out of range exception
+                {
+                    cout << "Out of range exception" << endl;
+                    break;
+                }
+            }
+        }
+        else {
+            cout << "Chosen rental is empty." << endl; // DEGUG
+        }
+        });
+
+    city_name.events().focus([&] { // selected or focus
+
+        //validateRETLButton.caption("Add Location");
+        validateRETLButton.enabled(true);
+
+        });
+
+    //droplistRENTALView.events().focus([&] { // selected or focus
+    //    if (rentals.empty()) {
+    //        cout << "Rental list is empty." << endl; // DEGUG
+    //        viewActiveRentedCarBttn.enabled(false);
+    //    }
+    //    });
+
+    //droplistRENTALView.events().selected([&] { // selected or focus
+    //    viewActiveRentedCarBttn.enabled(true);
+    //    validateRETLButton.caption("View Rental");
+    //    viewActiveRentedCarBttn.enabled(true);
+    //    });
 
 
 
     place plc_rental(fm4);
 
     // Divide the form into fields
-    plc_rental.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist> <weight=5%> <weight=25 removeBtn> <weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
+    plc_rental.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]><weight=5%> <vertical gap=10 actionButtons arrange=[25,25,25,25]> <weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
 
     //Insert widgets
     plc_rental.field("title") << rental_headerText;
     plc_rental.field("description") <<rental_screen_desc;
-    plc_rental.field("droplist") <<rental_droplist;
-    plc_rental.field("removeBtn") << remove_rentalBtn;
+   // plc_rental.field("droplist") << droplistRENTALView;
+    plc_rental.field("actionButtons") << simulateBtn << viewActiveRentedCarBttn << viewLateReturnCarBttn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc_rental.field("textboxs") << rental_startDate << rental_endDate;
-    plc_rental.field("buttons") << clear_rental << validate_rental;
+    plc_rental.field("buttons") << returnBttn << validateRETLButton;
 
 
 
@@ -582,10 +700,11 @@ int main()
 
 
 
+
     fm1.show();
     fm2.show();
     fm3.show();
-    //fm4.show();
+    fm4.show();
 
     exec();
 
