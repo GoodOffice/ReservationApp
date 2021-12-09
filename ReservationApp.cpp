@@ -114,46 +114,51 @@ int main()
         age.getline(0, ageTyped);
         address.getline(0, addressType);
 
-        //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
-        customer = new Customer();
-
-        customer->setFirstName(fnameTyped);
-        customer->setLastName(lnameTyped);
-        customer->setFullName(fnameTyped, lnameTyped);
-        customer->setAge(stoi(ageTyped));
-        customer->setAddress(addressType);
-        customer->id = customerIDincr;
-
-        string firstName = fnameTyped;
-        string lastName = lnameTyped;
-
-
-        cout << "\nCustomers size=" << customers.size() << endl;
-        customerIDincr++;
-        int index = 0;
-        for (vector<Customer*>::iterator itr = customers.begin(); itr != customers.end(); itr++)
-        {
-            string comp_fname = customers.at(index)->getFirstName();
-            string comp_lname = customers.at(index)->getLastName();
-            cout << "comp_firstname: " << comp_fname << endl;
-            cout << "comp_lastname: " << comp_lname << endl;
-            if (firstName == comp_fname && lastName == comp_lname) {
-                exist = true;
-                cout << "Customer already exists." << endl;
-                break;
-            }
-            else {
-                exist = false;
-                cout << "Added a new customer." << endl;
-            }
-            index++;
+        if (fnameTyped == "" || lnameTyped == "" || ageTyped == "" || addressType == "") {
+            cout << "\nEmpty ENTRY" << endl; // DEBUG
         }
+        else {
+            //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
+            customer = new Customer();
 
-        if (exist == false) {
-            customer->getCustomer_Info();
-            customers.push_back(customer);
-            string fullNameString = firstName + " " + lastName;
-            child.push_back(fullNameString); // back to string
+            customer->setFirstName(fnameTyped);
+            customer->setLastName(lnameTyped);
+            customer->setFullName(fnameTyped, lnameTyped);
+            customer->setAge(stoi(ageTyped));
+            customer->setAddress(addressType);
+            customer->id = customerIDincr;
+
+            string firstName = fnameTyped;
+            string lastName = lnameTyped;
+
+
+            cout << "\nCustomers size=" << customers.size() << endl;
+            customerIDincr++;
+            int index = 0;
+            for (vector<Customer*>::iterator itr = customers.begin(); itr != customers.end(); itr++)
+            {
+                string comp_fname = customers.at(index)->getFirstName();
+                string comp_lname = customers.at(index)->getLastName();
+                cout << "comp_firstname: " << comp_fname << endl;
+                cout << "comp_lastname: " << comp_lname << endl;
+                if (firstName == comp_fname && lastName == comp_lname) {
+                    exist = true;
+                    cout << "Customer already exists." << endl;
+                    break;
+                }
+                else {
+                    exist = false;
+                    cout << "Added a new customer." << endl;
+                }
+                index++;
+            }
+
+            if (exist == false) {
+                customer->getCustomer_Info();
+                customers.push_back(customer);
+                string fullNameString = firstName + " " + lastName;
+                child.push_back(fullNameString); // back to string
+            }
         }
 
         });
@@ -220,8 +225,7 @@ int main()
     child.events().selected([&] { // selected or focus
         //fm.close();
 
-        removeBtn.enabled(true);
-        validateCSButton.caption("Next");
+        removeBtn.enabled(true);       
         validateCSButton.enabled(true);
 
 
@@ -304,35 +308,40 @@ int main()
         string cityTyped;
         city_name.getline(0, cityTyped);
 
-        location = new Location();
-        location->setLocation_Name(cityTyped);
-        location->setLocation_Id(locationIDIncr);
-
-        cout << "\nLocation size=" << locations.size() << endl; // DEBUG
-        locationIDIncr++;
-        int index = 0;
-        for (vector<Location*>::iterator itr = locations.begin(); itr != locations.end(); itr++)
-        {
-            string comp_city = locations.at(index)->getLocation_Name();
-            cout << "comp_city: " << comp_city << endl;
-            if (cityTyped == comp_city) {
-                exist = true;
-                cout << "This location exists already." << endl;
-                break;
-            }
-            else {
-                exist = false;
-                cout << "Added a new location." << endl;
-            }
-            index++;
+        if (cityTyped == "") {
+            cout << "\nEmpty ENTRY" << endl; // DEBUG
         }
+        else {
+            location = new Location();
+            location->setLocation_Name(cityTyped);
+            location->setLocation_Id(locationIDIncr);
 
-        if (exist == false) {
-            location->getLocation_Info();
-            locations.push_back(location);
-            droplistVEHView.clear();
-            string cityString = location->getLocation_Name();
-            droplistLOCView.push_back(cityString); // back to string
+            cout << "\nLocation size=" << locations.size() << endl; // DEBUG
+            locationIDIncr++;
+            int index = 0;
+            for (vector<Location*>::iterator itr = locations.begin(); itr != locations.end(); itr++)
+            {
+                string comp_city = locations.at(index)->getLocation_Name();
+                cout << "comp_city: " << comp_city << endl;
+                if (cityTyped == comp_city) {
+                    exist = true;
+                    cout << "This location exists already." << endl;
+                    break;
+                }
+                else {
+                    exist = false;
+                    cout << "Added a new location." << endl;
+                }
+                index++;
+            }
+
+            if (exist == false) {
+                location->getLocation_Info();
+                locations.push_back(location);
+                droplistVEHView.clear();
+                string cityString = location->getLocation_Name();
+                droplistLOCView.push_back(cityString); // back to string
+            }
         }
 
         });
@@ -388,7 +397,6 @@ int main()
 
     droplistLOCView.events().selected([&] { // selected or focus
         remove_locationBtn.enabled(true);
-        validateLCButton.caption("Next");
         remove_locationBtn.enabled(true);
 
         city_name.caption(""); // clearing textbox
@@ -480,37 +488,42 @@ int main()
         string vehicleTyped;
         vehicle_name.getline(0, vehicleTyped);
 
-        vehicle = new Vehicle();
-        vehicle->setVehicle_Name(vehicleTyped);
-        vehicle->setVehicle_Id(vehiculeIDIncr);
-
-        cout << "\nVehicle size=" << vehicles.size() << endl; // DEBUG
-        vehiculeIDIncr++;
-        int index = 0;
-        for (vector<Vehicle*>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
-        {
-            string comp_car = vehicles.at(index)->getVehicle_Name();
-            cout << "comp_car: " << comp_car << endl;
-            if (vehicleTyped == comp_car) {
-                exist = true;
-                cout << "This vehicle exists already." << endl;
-                break;
-            }
-            else {
-                exist = false;
-                cout << "Added a new vehicle." << endl;
-            }
-            index++;
+        if (vehicleTyped == "") {
+            cout << "\nEmpty ENTRY" << endl; // DEBUG
         }
+        else {
+            vehicle = new Vehicle();
+            vehicle->setVehicle_Name(vehicleTyped);
+            vehicle->setVehicle_Id(vehiculeIDIncr);
 
-        if (exist == false) {
-            location->addVehicles(vehicle);
-            location->getVehicles();
-            vehicle->getVehicle_Info();
-            location->getLocation_Info();
-            vehicles.push_back(vehicle);
-            string locationString = vehicle->getVehicle_Name();
-            droplistVEHView.push_back(locationString); // back to string
+            cout << "\nVehicle size=" << vehicles.size() << endl; // DEBUG
+            vehiculeIDIncr++;
+            int index = 0;
+            for (vector<Vehicle*>::iterator itr = vehicles.begin(); itr != vehicles.end(); itr++)
+            {
+                string comp_car = vehicles.at(index)->getVehicle_Name();
+                cout << "comp_car: " << comp_car << endl;
+                if (vehicleTyped == comp_car) {
+                    exist = true;
+                    cout << "This vehicle exists already." << endl;
+                    break;
+                }
+                else {
+                    exist = false;
+                    cout << "Added a new vehicle." << endl;
+                }
+                index++;
+            }
+
+            if (exist == false) {
+                location->addVehicles(vehicle);
+                location->getVehicles();
+                vehicle->getVehicle_Info();
+                location->getLocation_Info();
+                vehicles.push_back(vehicle);
+                string locationString = vehicle->getVehicle_Name();
+                droplistVEHView.push_back(locationString); // back to string
+            }
         }
 
         });
@@ -561,7 +574,6 @@ int main()
 
     droplistVEHView.events().selected([&] { // selected or focus
         remove_vehicleBtn.enabled(true);
-        validateVHButton.caption("Next");
         remove_vehicleBtn.enabled(true);
         vehicle_name.caption("");
         });
@@ -633,48 +645,99 @@ int main()
         rental_startDate.getline(0, beginDateTyped);
         rental_endDate.getline(0, endDateTyped);
 
-        rental = new Rental();
-        rental->createNewRental(customer);
-        rental->setBegins_Date(beginDateTyped);
-        rental->setReturn_Date(endDateTyped);
-        rental->getBegins_Date();
-        rental->getReturn_Date();
+        if (beginDateTyped == "" || endDateTyped == "") {
+            cout << "\nEmpty ENTRY" << endl; // DEBUG
+        }
+        else {
+            rental = new Rental();
+            rental->init(customer);
+            rental->setBegins_Date(beginDateTyped);
+            rental->setReturn_Date(endDateTyped);
+            rental->getBegins_Date();
+            rental->getReturn_Date();
 
-        rental->getRentalCustomer()->getCustomer_Info();
-        string name = rental->getRentalCustomer()->getFullName();
-        string address = rental->getRentalCustomer()->getAddress();
-        int age = rental->getRentalCustomer()->getAge();
-        int  designation = rental->getRentalCustomer()->getReputation();
+            //rental->addRentals(rental);
 
-        //Repository* repository = new Repository();
-       // rental->setRental_Repository(repository);
+           
+            string name = rental->getRentalCustomer()->getFullName();
+            string address = rental->getRentalCustomer()->getAddress();
+            int age = rental->getRentalCustomer()->getAge();
+            int  designation = rental->getRentalCustomer()->getReputation();
 
-        rental->setRentalLocation(location);
-        Location* rentingLocation = rental->getRentalLocation();
-        rental->setRentalVehicle(vehicle);
-        Vehicle* rentingVehicle = rental->getRentalVehicle();
-        string veh_name = rentingVehicle->getVehicle_Name();
-        string rep = " ";
-        if (designation == 0)
-            rep = "Regular Customer";
-        else if (designation == 1)
-            rep = "Preferred Customer";
+            int index = 0;
+            for (vector<Rental*>::iterator itr = rentals.begin(); itr != rentals.end(); itr++)
+            {
+                string comp_fullname = rentals.at(index)->getRentalCustomer()->getFullName();              
+                cout << "comp_fullname: " << comp_fullname << endl;
 
-        rental_screen_desc.caption(name + "\n" +
-            address +
-            to_string(age) + " ~ years old " + "\n" +
-            "Reputation: " + rep + "\n" +
-            "Model: " + veh_name
+                if (name == comp_fullname) {
+                    exist = true;
+                    cout << "Rental already exists for this customer." << endl;
+                    break;
+                }
+                else {
+                    exist = false;
+                    cout << "Added a new customer." << endl;
+                }
+                index++;
+            }
+
+            if (exist == false) {
+                rental->getRentalCustomer()->getCustomer_Info();
+                rentals.push_back(rental);
+                rental->setRentalLocation(location);
+                Location* rentingLocation = rental->getRentalLocation();
+                rental->setRentalVehicle(vehicle);
+                Vehicle* rentingVehicle = rental->getRentalVehicle();
+                string veh_name = rentingVehicle->getVehicle_Name();
+                string rep = " ";
+                if (designation == 0)
+                    rep = "Regular Customer";
+                else if (designation == 1)
+                    rep = "Preferred Customer";
+
+                rental_screen_desc.caption(name + "\n" +
+                    address +
+                    to_string(age) + " ~ years old " + "\n" +
+                    "Reputation: " + rep + "\n" +
+                    "Model: " + veh_name
+                );
+            }
+
+            cout << "\nRentals size=" << rentals.size() << endl;
 
 
+            //Repository* repository = new Repository();
+           // rental->setRental_Repository(repository);
 
 
-
-
-
-        );
+        }
         });
 
+
+    viewActiveRentedCarBttn.events().click([&] {
+        form newCustomerInfo(fm4);
+        textbox nameMDL{ newCustomerInfo };
+        textbox ageMDL{ newCustomerInfo };
+        button btnA{ newCustomerInfo, "Add Customer" };
+        label labMDL{ newCustomerInfo, "write your name here" };
+        newCustomerInfo.div("vert <namelabel><Name><Age><Button>");
+        newCustomerInfo["namelabel"] << labMDL;
+        newCustomerInfo["Name"] << nameMDL;
+        newCustomerInfo["Age"] << ageMDL;
+        newCustomerInfo["Button"] << btnA;
+
+        newCustomerInfo.collocate();
+        //btnA.events().click([&] {
+        //    string nameTyped, ageTyped;
+        //    nameMDL.getline(0, nameTyped);
+        //    ageMDL.getline(0, ageTyped);
+        //    allCustomers.push_back(Customer(nameTyped, stoi(ageTyped)));
+        //    pDropCust->push_back(allCustomers.back().toString());
+        //    });
+        API::modal_window(newCustomerInfo);
+
+        });
 
     viewActiveRentedCarBttn.events().click([&] {
         if (pChosenRental != nullptr) {
@@ -745,6 +808,7 @@ int main()
 
 
 
+
     plc.collocate();
     plc_location.collocate();
     plc_vehicle.collocate();
@@ -753,10 +817,10 @@ int main()
 
 
 
-    //fm1.show();
+    fm1.show();
     fm2.show();
     fm3.show();
-    //fm4.show();
+    fm4.show();
 
     exec();
 

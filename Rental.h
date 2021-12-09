@@ -17,6 +17,7 @@ public:
 	Customer* cstm;
 	Location* rentalLocation;
 	Vehicle* rentalVehicle;
+	vector<Rental*> rentals;
 	Repository* repo;
 
 	Rental(){ }
@@ -26,14 +27,38 @@ public:
 	}
 
 	
-	void createNewRental(Customer* customer) {
+	void init(Customer* customer) {
 
-		setRentalCustomer(customer);
-		rental_id++;		
+		setRentalCustomer(customer);				
 		customer->setAttrb_Rental_Id(rental_id); // DEBUG - comment out to skip exception
 
 	}
 
+	void addRentals(Rental* rental) {
+		rentals.push_back(rental);
+		rental_id++;
+	}
+
+	vector<Rental*> getRentals() {
+
+		int index = 0;
+		for (vector<Rental*>::iterator itr = rentals.begin(); itr != rentals.end(); itr++)
+		{
+			try {
+				/*vehicles.push_back(v);*/
+				cout << "Rental.h:: getRentals - RENTAL ID: "  << rental_id << endl;
+				cout << "Rental.h:: getRentals - RENTAL of: "  << rentals.at(index)->getRentalVehicle()->getVehicle_Name()<< endl;
+			}
+			catch (out_of_range exc)
+			{
+				cout << "Out of range exception" << endl;
+			}
+
+			index++;
+		}
+		return rentals;
+
+	}
 	void setRental_Repository(Repository* repository) {
 		repo = repository;
 
