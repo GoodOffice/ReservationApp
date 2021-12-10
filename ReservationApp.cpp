@@ -8,6 +8,7 @@
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/widgets/textbox.hpp>
 #include <nana/gui/widgets/combox.hpp>
+#include <nana/gui/widgets/checkbox.hpp>
 #include "Customer.h"
 #include "Vehicle.h"
 #include "Location.h"
@@ -53,7 +54,7 @@ int main()
     fm4.outline_size({ 300, 550 });
     fm4.caption("Rental Log");
 
-    label lab{ fm1, "Hello, <bold blue size=16>Customers</>" }, desc{ fm1, "Create a new customer or select from the list above to continue." };
+    label lab{ fm1, "Hello, <bold blue size=16>Customers</>" }, desc{ fm1, "Create and select a customer from the list" };
     lab.format(true);
 
     vector<Customer*> customers;
@@ -65,12 +66,34 @@ int main()
     //child.push_back("Item 2");
     //child.push_back("Item 3");
     //child.push_back("Item 4");
+    checkbox ckbox{ fm1, rectangle{10, 10, 200, 30} };
+    ckbox.caption("Preferred");
+    ckbox.events().click([&] {
+        if (pChosenCustomer != nullptr) {
+            if (ckbox.checked()) {
+                customer->setReputation(1);
+                cout << "IS favorite " << std::endl;
+            }
+            else {
+                customer->setReputation(0);
+                cout << "Is NOT favorite " << std::endl;
+
+            }
+        }
+        else {
+            cout << "You have to select a customer first. " << std::endl;
+
+        }
+
+        });
+
     child.events().selected([&](const arg_combox& ar_cbx) {
         std::cout << ar_cbx.widget.caption() << std::endl;
         //auto custFilter = [&](auto cust) { return cust.getFullName().compare(txt) == 0; };
         auto txt = child.text(child.option());
 
         cout << "inSelected: " << txt << endl; // DEGUG
+
 
         for (auto* cust : customers)
         {
@@ -102,7 +125,20 @@ int main()
     validateCSButton.enabled(false);
     cancel.caption("Cancel");
 
-
+    age.events().text_changed([&] {
+        string ageTyped;
+        age.getline(0, ageTyped);
+        int b = stoi(ageTyped);
+        
+        if (b <= 25) {
+            cout << "\nYounger or equal" << endl;
+            ckbox.enabled(false);
+        }
+        else {
+            cout << "\nOLDER than 25: " << b << endl;
+            ckbox.enabled(true);
+        }
+        });
 
 
     /* Creates a customer with textbox values*/
@@ -119,6 +155,8 @@ int main()
         }
         else {
             //cout << "First name from text:" << fnameTyped << endl; // DEBUG    
+
+
             customer = new Customer();
 
             customer->setFirstName(fnameTyped);
@@ -240,11 +278,12 @@ int main()
     place plc(fm1);
 
     // Divide the form into fields
-    plc.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist>  < weight=5%> <weight=25 removeBtn> < weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
+    plc.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist>  <weight=5%> <weight=25 removeBtn> <weight=4%> <weight=20 checkview> <weight=7%> <weight=5% description> <weight=9.5%>  <weight=25 buttons gap=14> ><>><>");
     //Insert widgets
     plc.field("title") << lab;
     plc.field("description") << desc;
     plc.field("droplist") << child;
+    plc.field("checkview") << ckbox;
     plc.field("removeBtn") << removeBtn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc.field("textboxs") << fname << lname << age << address;
@@ -447,7 +486,7 @@ int main()
     label vehicle_headerText{ fm3, "Hello, <bold green size=16>Vehicles</>" }, veh_screen_desc{ fm3, "You can add new vehicles to the repository." };
     vehicle_headerText.format(true);
 
-    
+    label info(fm3);
     Vehicle* vehicle;
     Vehicle* pChosenVehicle = nullptr;
 
@@ -469,6 +508,16 @@ int main()
                 vehicle = pChosenVehicle;
                 cout << "inSelected: Current vehicle: (AFTER) " << vehicle->getVehicle_Name() << endl; // DEGUG
 
+                if (veh->getVehicle_Status() == 0) {
+
+                    info.show();
+                    info.caption("<bold color=0xff0000 font=\"Consolas\" size=7>    This car is currently not available</>");
+                    info.format(true);
+                    //veh_screen_desc.caption("<red size=16>Vehicles</>")
+                }
+                else {
+                    info.hide();
+                }
             }
         }
         });
@@ -586,12 +635,13 @@ int main()
     place plc_vehicle(fm3);
 
     // Divide the form into fields
-    plc_vehicle.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=6% droplist> <weight=5%> <weight=25 removeBtn> <weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
+    plc_vehicle.div("<><weight=80% vertical<><weight=85% vertical <weight=15% title> <vertical gap=10 textboxs arrange=[25,25,25,25]> <weight=10 infoView> <weight=5%> <weight=6% droplist> <weight=5%> <weight=25 removeBtn> <weight=15%> <weight=15% description> <weight=25 buttons gap=14> ><>><>");
 
     //Insert widgets
     plc_vehicle.field("title") << vehicle_headerText;
     plc_vehicle.field("description") << veh_screen_desc;
     plc_vehicle.field("droplist") << droplistVEHView;
+    plc_vehicle.field("infoView") << info;
     plc_vehicle.field("removeBtn") << remove_vehicleBtn;
     //The field textboxs is vertical, it automatically adjusts the widgets' top and height. 
     plc_vehicle.field("textboxs") << vehicle_name;
@@ -658,7 +708,8 @@ int main()
             rental->setReturn_Date(endDateTyped);
             rental->getBegins_Date();
             rental->getReturn_Date();
-
+            rental->setRentalLocation(location);
+            rental->setRentalVehicle(vehicle);
             //rental->addRentals(rental);
 
            
@@ -678,6 +729,11 @@ int main()
                     cout << "Rental already exists for this customer." << endl;
                     break;
                 }
+                else if (rental->getRentalVehicle()->getVehicle_Status() == 0) {
+                    exist = true;
+                    cout << "This vehicle can't be rented now.  " << endl;
+                    break;
+                }
                 else {
                     exist = false;
                     cout << "Added a new customer." << endl;
@@ -689,8 +745,9 @@ int main()
                 rental->updateRentalID();
                 rental->getRentalCustomer()->getCustomer_Info();
                 rentals.push_back(rental);
-                rental->setRentalLocation(location);
-                rental->setRentalVehicle(vehicle);
+               /* rental->setRentalLocation(location);
+                rental->setRentalVehicle(vehicle);*/
+                rental->getRentalVehicle()->setVehicle_Status(0);
                 //string rentalString = rental->getRentalCustomer()->getFullName();
                 string rentalString = rental->getRentalVehicle()->getVehicle_Name();
                 droplistRENTALView.push_back(rentalString);
