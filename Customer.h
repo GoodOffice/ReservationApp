@@ -13,7 +13,7 @@ public:
 	int age = 0;
 	int attrb_rental_id = -1;
 	int isFavorite = 1;
-	int reputation = 0;
+	int reputation;
 	//Rental* rtl;
 
 	Customer(); // constructor

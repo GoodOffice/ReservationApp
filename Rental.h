@@ -14,6 +14,8 @@ public:
 		int start_date = 0, return_date = 0;
 		int time_elapsed = 0;
 		int days_count = 0;
+		double price, totalPrice = 0.00;
+		bool isLate = false;
 	Customer* cstm;
 	Location* rentalLocation;
 	Vehicle* rentalVehicle;
@@ -151,26 +153,39 @@ public:
 		return_date = stoi(end);
 	}
 
-	void bonoCheck(Customer* customer) {
+	double bonoCheck(Customer* customer) {
 		cstm = customer;
 		if (cstm->getAge() <= 25) {
-			applyCharge();			
+			return applyCharge();			
 		}
 		else {
 			if (cstm->getReputation() == cstm->isFavorite) {
-				applyPromo();
+			return	applyPromo();
 			}
 			else
 				cout << "Rental.h:: getReputation Standard payment fees  " << endl; 
 		}			
 	}
 
-	void applyCharge() {
-		cout << "Rental.h:: applyCharge Additional Charge of 20% applied " << endl;
+
+	void setPrice(double fee) {
+		price = fee;
 	}
 
-	void applyPromo() {
-		cout << "Rental.h:: applyPromo 20% off Promotion applied " << endl;
+
+
+	double applyCharge() {
+		double reduction = (20.00 * 100) / price;
+		totalPrice = (price + reduction) * days_count;
+		cout << "\n**Rental.h:: applyCharge Additional 20% charge policy will apply**" << endl;
+		return totalPrice;
+	}
+
+	double applyPromo() {
+		double reduction = (20.00 * 100) / price;
+		totalPrice = (price - reduction) * days_count;
+		cout << "\n**Rental.h:: applyPromo 20% off promotion will apply**" << endl;
+		return totalPrice;
 	}
 
 	void dayIncrementer() {
@@ -189,6 +204,7 @@ public:
 			cout << "Rental.h:: dayIncremental - You've reached return date: " << return_date << endl;
 
 		else if (change > return_date) {
+			isLate = true;
 			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - EXPECTED: " << return_date << endl;
 			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - CURRENT: " << start_date + days_count << endl;
 		}
@@ -196,6 +212,10 @@ public:
 
 		cout << "Rental.h:: dayIncremental - time elapsed: " << time_elapsed << endl;
 		cout << "Rental.h:: dayIncremental - days count: " << days_count << endl;
+	}
+
+	bool getTimeofReturn() {
+		return isLate;
 	}
 
 
