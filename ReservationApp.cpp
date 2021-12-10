@@ -268,6 +268,9 @@ int main()
     vector<Vehicle*> vehicles;
     combox droplistVEHView(fm3, rectangle(20, 3, 150, 30));
     //droplistLOCView.events().selected([](const arg_combox& ar_cbx) { std::cout << ar_cbx.widget.caption() << std::endl; });
+    form mdWindow1;
+    combox droplistRENTALView(mdWindow1, rectangle(20, 3, 150, 30));
+
 
     droplistLOCView.events().selected([&](const arg_combox& ar_cbx) {
         std::cout << ar_cbx.widget.caption() << std::endl;
@@ -650,7 +653,7 @@ int main()
         }
         else {
             rental = new Rental();
-            rental->init(customer);
+            rental->init(customer); // set customer
             rental->setBegins_Date(beginDateTyped);
             rental->setReturn_Date(endDateTyped);
             rental->getBegins_Date();
@@ -683,11 +686,21 @@ int main()
             }
 
             if (exist == false) {
+                rental->updateRentalID();
                 rental->getRentalCustomer()->getCustomer_Info();
                 rentals.push_back(rental);
                 rental->setRentalLocation(location);
+                rental->setRentalVehicle(vehicle);
+                //string rentalString = rental->getRentalCustomer()->getFullName();
+                string rentalString = rental->getRentalVehicle()->getVehicle_Name();
+                droplistRENTALView.push_back(rentalString);
+                cout << "\n Rental String output: " << rentalString << endl;
+                /* BREAK */
+
+
                 Location* rentingLocation = rental->getRentalLocation();
                 rental->setRentalVehicle(vehicle);
+
                 Vehicle* rentingVehicle = rental->getRentalVehicle();
                 string veh_name = rentingVehicle->getVehicle_Name();
                 string rep = " ";
@@ -716,66 +729,108 @@ int main()
 
 
     viewActiveRentedCarBttn.events().click([&] {
-        form newCustomerInfo(fm4);
-        textbox nameMDL{ newCustomerInfo };
-        textbox ageMDL{ newCustomerInfo };
-        button btnA{ newCustomerInfo, "Add Customer" };
-        label labMDL{ newCustomerInfo, "write your name here" };
-        newCustomerInfo.div("vert <namelabel><Name><Age><Button>");
-        newCustomerInfo["namelabel"] << labMDL;
-        newCustomerInfo["Name"] << nameMDL;
-        newCustomerInfo["Age"] << ageMDL;
-        newCustomerInfo["Button"] << btnA;
 
-        newCustomerInfo.collocate();
-        //btnA.events().click([&] {
-        //    string nameTyped, ageTyped;
-        //    nameMDL.getline(0, nameTyped);
-        //    ageMDL.getline(0, ageTyped);
-        //    allCustomers.push_back(Customer(nameTyped, stoi(ageTyped)));
-        //    pDropCust->push_back(allCustomers.back().toString());
-        //    });
-        API::modal_window(newCustomerInfo);
+               
 
+        mdWindow1.move(pa.x + pa.width / 1.534, pa.y + 350);
+        mdWindow1.outline_size({ 300, 550 });
+        mdWindow1.caption("Rental Log");
+
+
+        label labMDL{ mdWindow1, "Active Rentals" }, details{ mdWindow1 };
+
+        
+
+        droplistRENTALView.events().selected([&](const arg_combox& ar_cbx) {
+        std::cout << ar_cbx.widget.caption() << std::endl;
+        auto txt = droplistRENTALView.text(droplistRENTALView.option());
+
+        cout << "inSelected: " << txt << endl; // DEGUG
+
+        for (auto* rtl : rentals)
+        {
+            cout << "inSelected loop city: " << rtl->getRentalVehicle()->getVehicle_Name() << endl; // // DEGUG
+            if (rtl->getRentalVehicle()->getVehicle_Name().compare(txt) == 0)
+                pChosenRental = rtl; //store the pointer to the chosen customer;
+            cout << "inSelected: Current rental: " << rental->getRentalVehicle()->getVehicle_Name() << endl; // DEGUG
+            cout << "inSelected: RENTAL: " << pChosenRental->getRentalVehicle()->getVehicle_Name()<< endl; // DEGUG
+            rental = pChosenRental;
+            cout << "inSelected: Current rental: (AFTER) " << rental->getRentalVehicle()->getVehicle_Name() << endl; // DEGUG
+        }
         });
 
-    viewActiveRentedCarBttn.events().click([&] {
-        if (pChosenRental != nullptr) {
-            cout << "Chosen rentals is at least one." << endl; // DEBUG
+        
+        if (rentals.size() > 0) {
 
             int index = 0;
-            auto it = rentals.begin();
-            while (it != rentals.end())
+            string msg = "";
+            for (vector<Rental*>::iterator itr = rentals.begin(); itr != rentals.end(); itr++)
             {
                 try {
-                    if (pChosenRental->getRentalVehicle()->getVehicle_Name() == rentals.at(index)->getRentalVehicle()->getVehicle_Name())
-                    {
-                        it = rentals.erase(it);
-                        //droplistRENTALView.erase(index);
-                    }
-                    else {
-                        ++it;
-                    }
-                    ++index;
+                    msg = rentals.at(index)->getRentalVehicle()->getVehicle_Name();
+                    cout << "Rental.h:: getRentals - RENTAL ID: " << rentals.at(index)->rental_id << endl; // DEBUG
+                    cout << "Rental.h:: getRentals - RENTAL of: " << rentals.at(index)->getRentalVehicle()->getVehicle_Name() << endl; // DEBUG
+                    //details.caption(msg);
                 }
-                catch (out_of_range exc) // catching out of range exception
+                catch (out_of_range exc)
                 {
                     cout << "Out of range exception" << endl;
-                    break;
                 }
+
+                index++;
             }
+
+
+
+            cout << "\nRental list size - viewActiveRentedCarBttn:  " << rental->getRentals().size() << endl; // DEBUG
         }
-        else {
-            cout << "Chosen rental is empty." << endl; // DEGUG
-        }
+        
+        place plc_modal1(mdWindow1);
+        //plc_modal1.div("<><weight=10% vertical<> <headerlabel><details> <weight=6% droplistRental> ");
+        plc_modal1.div("<><weight=80% vertical<><weight=85% vertical <weight=15% headerlabel>  <weight=6% droplistRental>< weight=5%>< weight=15%><weight=15% details> ><>><>");
+
+        plc_modal1.field("headerlabel") << labMDL;
+        plc_modal1.field("details") << details;
+        plc_modal1.field("droplistRental") << droplistRENTALView;
+
+
+        plc_modal1.collocate();
+        API::modal_window(mdWindow1);
+
         });
 
-    city_name.events().focus([&] { // selected or focus
+    //viewActiveRentedCarBttn.events().click([&] {
+    //    if (pChosenRental != nullptr) {
+    //        cout << "Rentals is at least one." << endl; // DEBUG
 
-        //validateRETLButton.caption("Add Location");
-        validateRETLButton.enabled(true);
+    //        int index = 0;
+    //        auto it = rentals.begin();
+    //        while (it != rentals.end())
+    //        {
+    //            try {
+    //                if (pChosenRental->getRentalVehicle()->getVehicle_Name() == rentals.at(index)->getRentalVehicle()->getVehicle_Name())
+    //                {
+    //                    it = rentals.erase(it);
+    //                    //droplistRENTALView.erase(index);
+    //                }
+    //                else {
+    //                    ++it;
+    //                }
+    //                ++index;
+    //            }
+    //            catch (out_of_range exc) // catching out of range exception
+    //            {
+    //                cout << "Out of range exception" << endl;
+    //                break;
+    //            }
+    //        }
+    //    }
+    //    else {
+    //        cout << "Chosen rental is empty." << endl; // DEGUG
+    //    }
+    //    });
 
-        });
+
 
     //droplistRENTALView.events().focus([&] { // selected or focus
     //    if (rentals.empty()) {

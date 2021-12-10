@@ -9,7 +9,7 @@ class Vehicle {
 
 public:
 	int vehicle_id, vehicle_location_id;
-	string vehicle_name; // to remove later - >vehicle_location_name 
+	string vehicle_name = ""; // to remove later - >vehicle_location_name 
 	int isUnAvailable = 0;
 	int isAvailable = 1;
 	int status = isAvailable;

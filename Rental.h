@@ -34,6 +34,10 @@ public:
 
 	}
 
+	void updateRentalID() {
+		rental_id++;
+	}
+
 	void addRentals(Rental* rental) {
 		rentals.push_back(rental);
 		rental_id++;
