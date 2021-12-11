@@ -18,7 +18,7 @@ void Location::getLocation_Info(){
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Id: " << getLocation_Id() << endl;
 	if (getLocation_Name() != " ")
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Name: " << getLocation_Name() << endl;
-	if (getLocation_Status() <!0)
+	if (getLocation_Status() < 0)
 		cout << "Location.cpp:: getLocation_Info -> getLocation_Status: " << getLocation_Status() << endl;
 	if (getCapacity() > 0) {
 		cout << "Location.cpp:: getLocation_Info -> getCapacity: location Id " << location_id << " size is " << this->capacity << endl;

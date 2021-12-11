@@ -14,6 +14,8 @@ public:
 	int attrb_rental_id = -1;
 	int isFavorite = 1;
 	int reputation;
+	bool isCurrentlyRenting = false;
+
 	//Rental* rtl;
 
 	Customer(); // constructor
@@ -28,6 +30,7 @@ public:
 	int getAttrb_Rental_Id();
 	int getReputation();
 	void getCustomer_Info();
+	bool getCustomerRentalStatus();
 
 	/*Set Methods*/
 	void setFirstName(string);
@@ -38,6 +41,7 @@ public:
 	void setAttrb_Rental_Id(int);
 	void updateAttrb_Rental_Id(int);
 	void setReputation(int);
+	void setCustomerRentalStatus(bool);
 	
 	bool operator==(const Customer& other) const {
 		return firstname == other.firstname && lastname == other.lastname;

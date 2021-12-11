@@ -40,6 +40,10 @@ void Customer::getCustomer_Info() {
 
 }
 
+bool Customer::getCustomerRentalStatus() {
+	return isCurrentlyRenting;
+}
+
 /*Sets*/
 void Customer::setFirstName(string cs_fname) { firstname = cs_fname; }
 void Customer::setLastName(string cs_lname) { lastname = cs_lname; }
@@ -58,6 +62,10 @@ void Customer::updateAttrb_Rental_Id(int rental_id) {
 }
 void Customer::setReputation(int rep) {
 	reputation = rep; }
+
+void Customer:: setCustomerRentalStatus(bool status) {
+	isCurrentlyRenting = status;
+}
 Customer::~Customer() { } // desctructor
 	
 	

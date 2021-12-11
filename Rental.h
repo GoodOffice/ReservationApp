@@ -14,7 +14,7 @@ public:
 		int start_date = 0, return_date = 0;
 		int time_elapsed = 0;
 		int days_count = 0;
-		double price, totalPrice = 0.00;
+		double price, basePrice = 0.00, totalPrice = 0.00;
 		bool isLate = false;
 	Customer* cstm;
 	Location* rentalLocation;
@@ -153,39 +153,56 @@ public:
 		return_date = stoi(end);
 	}
 
-	double bonoCheck(Customer* customer) {
-		cstm = customer;
-		if (cstm->getAge() <= 25) {
-			return applyCharge();			
-		}
-		else {
-			if (cstm->getReputation() == cstm->isFavorite) {
-			return	applyPromo();
-			}
-			else
-				cout << "Rental.h:: getReputation Standard payment fees  " << endl; 
-		}			
+
+
+	double getPrice() {
+		return price;
 	}
 
-
 	void setPrice(double fee) {
+		basePrice = fee;
 		price = fee;
 	}
 
 
 
+	double calculateTotalPriceCharge() {
+		return applyCharge() * days_count;
+	}
+
+	double calculateTotalPricePromo() {
+		return applyPromo() * days_count;
+	}
+
+	double calculateTotalStandard() {
+		return applyStandard() * days_count;
+	}
+
 	double applyCharge() {
-		double reduction = (20.00 * 100) / price;
-		totalPrice = (price + reduction) * days_count;
-		cout << "\n**Rental.h:: applyCharge Additional 20% charge policy will apply**" << endl;
-		return totalPrice;
+		price += ((20 * basePrice) / 100);
+		return price;
 	}
 
 	double applyPromo() {
-		double reduction = (20.00 * 100) / price;
-		totalPrice = (price - reduction) * days_count;
-		cout << "\n**Rental.h:: applyPromo 20% off promotion will apply**" << endl;
-		return totalPrice;
+		price -= ((20 * basePrice) / 100);
+		return price;
+	}
+	double applyStandard() {		
+		return price;
+	}
+
+	double bonoCheck(Customer* customer) {
+		cstm = customer;
+		if (cstm->getAge() <= 25) {
+			return applyCharge();
+		}
+		else {
+			if (cstm->getReputation() == cstm->isFavorite) {
+				return	applyPromo();
+			}
+			else
+				cout << "Rental.h:: getReputation Standard payment fees  " << endl;
+		}
 	}
 
 	void dayIncrementer() {
@@ -197,7 +214,8 @@ public:
 		time_elapsed--; // 9
 		days_count++;
 
-		int change = start_date + days_count;
+		//int change = start_date + days_count;
+		int change = (start_date + days_count) -1;
 	
 
 		if(change == return_date)
@@ -214,7 +232,28 @@ public:
 		cout << "Rental.h:: dayIncremental - days count: " << days_count << endl;
 	}
 
-	bool getTimeofReturn() {
+
+
+	bool checkRentalCondition() {
+		time_elapsed = return_date - (start_date + days_count); // 10
+
+		int change = start_date + days_count;
+
+
+		if (change == return_date)
+			cout << "Rental.h:: dayIncremental - Customer has reached return date. " << return_date << endl;
+		if (change < return_date) {
+			isLate = false;
+			cout << "Rental.h:: dayIncremental - Customer is not late on return of rental. Day of return is #" << return_date << endl;
+		}
+		else if (change > return_date) {
+			isLate = true;
+			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - EXPECTED: " << return_date << endl;
+			cout << "Rental.h:: dayIncremental - You've MAXED out your return date - CURRENT: " << start_date + days_count << endl;
+		}
+		cout << "Rental.h:: dayIncremental - time elapsed: " << time_elapsed << endl;
+		cout << "Rental.h:: dayIncremental - days count: " << days_count << endl;
+	
 		return isLate;
 	}
 
