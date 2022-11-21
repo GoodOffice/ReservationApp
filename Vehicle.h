@@ -3,35 +3,35 @@
 #ifndef Vehicle_
 #define Vehicle_
 #include <iostream>
+
 using namespace std;
 
 class Vehicle {
 
 public:
-	int vehicle_id, vehicle_location_id;
-	string vehicle_name = ""; // to remove later - >vehicle_location_name 
-	int isUnAvailable = 0;
-	int isAvailable = 1;
-	int status = isAvailable;
+    int vehicle_id, vehicle_location_id;
+    string vehicle_name = ""; // to remove later ->vehicle_location_name 
+    int isUnAvailable = 0;
+    int isAvailable = 1;
+    int status = isAvailable;
 
-	Vehicle();
-	Vehicle(Vehicle&);
-	Vehicle(int, string);
-	Vehicle(int, string,  bool);
+    Vehicle();
+    Vehicle(Vehicle&);
+    Vehicle(int, string);
+    Vehicle(int, string, bool);
 
-	/*Get Methods*/
-	int getVehicle_Id();
-	string getVehicle_Name();
-	int getVehicle_Location_Id();
-	bool getVehicle_Status();
-	void getVehicle_Info();
+    /*Get Methods*/
+    int getVehicle_Id();
+    string getVehicle_Name();
+    int getVehicle_Location_Id();
+    bool getVehicle_Status();
+    void getVehicle_Info();
 
-	/*Set Methods*/
-	void setVehicle_Id(int);
-	void setVehicle_Name(string);
-	void setVehicle_Location_Id(int );
-	void setVehicle_Status(int );
-	~Vehicle();
-
+    /*Set Methods*/
+    void setVehicle_Id(int);
+    void setVehicle_Name(string);
+    void setVehicle_Location_Id(int);
+    void setVehicle_Status(int);
+    ~Vehicle();
 };
 #endif

@@ -7,11 +7,12 @@
 #define ReservationApp_
 
 #include "Vehicle.h"
+
 bool toggleView(int flag) {
-	if (flag == 1)
-		return true;
-	else
-		return false;
+    if (flag == 1)
+        return true;
+    else
+        return false;
 
 }
 
